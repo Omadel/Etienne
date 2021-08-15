@@ -5,11 +5,9 @@
   "description": "Etienne's Plugins.",
   "unity": "2020.3",
   "dependencies": {},
-  "keywords": [],
   "author": {
     "name": "Etienne Javelle",
     "email": "etiennejvle@gmail.com",
     "url": "https://github.com/Omadel/Etienne"
   },
-  "samples": []
 }
