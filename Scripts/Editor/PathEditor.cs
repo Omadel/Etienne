@@ -1,10 +1,11 @@
+using Etienne;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace Etienne {
+namespace EtienneEditor {
     [CustomEditor(typeof(Path))]
-    public class PathEditor : Etienne.Editor<Path> {
+    public class PathEditor : Editor<Path> {
 
         private void OnEnable() {
             SetupPathList();

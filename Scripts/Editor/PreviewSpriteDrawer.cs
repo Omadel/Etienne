@@ -1,7 +1,8 @@
+using Etienne;
 using UnityEditor;
 using UnityEngine;
 
-namespace Etienne {
+namespace EtienneEditor {
     [CustomPropertyDrawer(typeof(PreviewSpriteAttribute))]
     public class PreviewSpriteDrawer : PropertyDrawer {
         private int height;
