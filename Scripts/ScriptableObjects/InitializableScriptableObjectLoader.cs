@@ -1,7 +1,7 @@
 using UnityEditor;
 
 namespace Etienne {
-    public static class InitializableScriptableObjectLoader {
+    internal static class InitializableScriptableObjectLoader {
 
         [InitializeOnLoadMethod]
         private static void Load() {
