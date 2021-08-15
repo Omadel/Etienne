@@ -1,14 +1,7 @@
 {
   "name": ".com:Omadel/Etienne.git",
   "version": "0.0.1",
-
   "displayName": "Etienne",
   "description": "Etienne's Plugins.",
   "unity": "2020.3",
-
-  "author": {
-    "name": "Etienne Javelle",
-    "email": "etiennejvle@gmail.com",
-    "url": "https://etiennejavelle.itch.io/"
-    },
 }
