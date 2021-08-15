@@ -10,5 +10,6 @@
 		"type": "git",
 		"url": "https://github.com/Omadel/Etienne.git"
   },
-  "hideInEditor": "false"
+  "hideInEditor": "false",
+  "unityRelease": "0b5",
 }
