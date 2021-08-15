@@ -29,9 +29,6 @@ ExportedObj/
 *.opendb
 *.vsconfig
 
-# Unity3D generated meta files
-*.pidb.meta
-*.pdb.meta
 
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
