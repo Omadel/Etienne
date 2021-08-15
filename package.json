@@ -1,0 +1,13 @@
+{
+  "name": "com.Etienne",
+  "displayName": "Etienne",
+  "version": "0.0.1",
+  "description": "Etienne's Plugins.",
+  "unity": "2020.3",
+  "author": "Etienne Javelle",
+  "dependencies": {},
+  "repository": {
+		"type": "git",
+		"url": "https://github.com/Omadel/Etienne.git"
+  }
+}
