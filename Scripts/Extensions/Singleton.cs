@@ -24,6 +24,15 @@ namespace Etienne {
             }
         }
 
+        public static void ResetInstance() {
+            instance = null;
+        }
+
+        public void DestroyInstance() {
+            GameObject.Destroy(gameObject);
+            ResetInstance();
+        }
+
         private static T instance;
     }
 }
