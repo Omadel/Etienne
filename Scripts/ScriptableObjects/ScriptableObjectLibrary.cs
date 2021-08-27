@@ -7,8 +7,8 @@ using UnityEngine;
 namespace Etienne {
     public class ScriptableObjectLibrary<T> : InitializableScriptableObject where T : ScriptableObject {
         public static List<T> Library => staticLibrary;
-        private static List<T> staticLibrary;
-        [SerializeField] private List<T> library;
+        protected static List<T> staticLibrary;
+        [SerializeField] protected List<T> library;
         public override void Initialize() {
 #if UNITY_EDITOR
             library.Clear();
