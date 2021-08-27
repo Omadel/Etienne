@@ -1,8 +1,12 @@
 {
-    "name": "Etienne",
+    "name": "Etienne-Editor",
     "rootNamespace": "",
-    "references": [],
-    "includePlatforms": [],
+    "references": [
+        "GUID:22ded8885bc72c54599b382643fa9d31"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
