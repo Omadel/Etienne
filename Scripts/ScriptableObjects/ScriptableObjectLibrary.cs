@@ -24,7 +24,6 @@ namespace Etienne {
                 library.Add(item as T);
                 message.Append($"{item}, ");
             }
-            Debug.Log($"{message}\r\nInitialized");
             staticLibrary = library;
 #endif
         }

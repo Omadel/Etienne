@@ -6,11 +6,14 @@ namespace Etienne {
         [InitializeOnLoadMethod]
         private static void Load() {
             string[] assets = AssetDatabase.FindAssets("t:InitializableScriptableObject");
-            foreach(string asset in assets) {
-                string path = AssetDatabase.GUIDToAssetPath(asset);
+            for(int i = 0; i < assets.Length; i++) {
+                string path = AssetDatabase.GUIDToAssetPath(assets[i]);
                 InitializableScriptableObject staticSO = AssetDatabase.LoadAssetAtPath<InitializableScriptableObject>(path);
+                EditorUtility.DisplayProgressBar("Initialize Scriptable Objects", $"{staticSO.name}", (float)i / assets.Length);
                 staticSO.Initialize();
+                //comment
             }
+            EditorUtility.ClearProgressBar();
         }
     }
 }
