@@ -24,9 +24,11 @@ namespace Etienne {
             }
         }
 
-        public static void ResetInstance() {
-            instance = null;
+        protected virtual void OnDestroy() {
+            if(!isPersistant) ResetInstance();
         }
+
+        public static void ResetInstance() => Singleton<T>.instance = null;
 
         public void DestroyInstance() {
             GameObject.Destroy(gameObject);
