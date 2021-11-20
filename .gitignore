@@ -1,2 +1,7 @@
-Researches
-Researches.meta
+*
+!Scripts
+!Scripts.meta
+!Editor
+!Editor.meta
+!package.json
+!package.json.meta
