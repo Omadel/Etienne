@@ -34,6 +34,7 @@ namespace Etienne {
         private void SetupUICamera() {
             camera = GameObject.FindObjectOfType<Camera>();
             camera.tag = "Untagged";
+            camera.name = "Loading Camera";
             camera.clearFlags = CameraClearFlags.Nothing;
             camera.gameObject.layer = gameObject.layer;
             camera.cullingMask = 1 << gameObject.layer;
