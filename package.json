@@ -6,5 +6,12 @@
   "unity": "2020.3",
   "author": "Etienne Javelle",
   "enableLockFile": true,
-  "resolutionStrategy": "highest"
+  "resolutionStrategy": "highest",
+  "samples": [
+    {
+      "displayName": "Loading Screen",
+      "description": "Contains sample scenes using my loading system",
+      "path": "Samples~/SampleLoadingScreen"
+    }
+  ]
 }
