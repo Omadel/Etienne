@@ -11,7 +11,7 @@
     {
       "displayName": "Loading Screen",
       "description": "Contains sample scenes using my loading system",
-      "path": "Samples/SampleLoadingScreen"
+      "path": "Samples~/SampleLoadingScreen"
     }
   ]
 }
