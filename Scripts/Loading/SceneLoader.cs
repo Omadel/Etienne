@@ -136,6 +136,7 @@ namespace Etienne {
             SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(loadIndexes[loadIndexes.Length - 1]));
 
             HideLoadingScreen();
+            camera.gameObject.SetActive(false);
 
             Time.timeScale = 1f;
         }
