@@ -1,7 +1,10 @@
 {
     "name": "Etienne",
-    "rootNamespace": "",
-    "references": [],
+    "rootNamespace": "Etienne",
+    "references": [
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:88c8bf06802dbb448a46210914e49d12"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
@@ -9,6 +12,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.textmeshpro",
+            "expression": "2.0.0",
+            "define": "TMP"
+        }
+    ],
     "noEngineReferences": false
 }
