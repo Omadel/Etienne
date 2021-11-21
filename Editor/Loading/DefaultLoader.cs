@@ -31,7 +31,7 @@ namespace EtienneEditor {
             int sceneBuildIndex = EditorPrefs.GetInt(EditorPrefsKeys.DefaultSceneBuildIndex, 0);
             if(EditorSceneManager.GetActiveScene() == EditorSceneManager.GetSceneByBuildIndex(sceneBuildIndex)) return;
 
-            Debug.LogWarning($"Default loader used, loading default scene{System.Environment.NewLine}To change the settings go to Tools>Etienne>Etienne Utility Panel");
+            Debug.Log($"<b>Etienne Default Loader</b> <color=green>used</color>, loading default scene{System.Environment.NewLine}To change the settings go to <b>Tools>Etienne>Etienne Utility Panel</b>");
 
             EditorSceneManager.LoadScene(sceneBuildIndex);
         }

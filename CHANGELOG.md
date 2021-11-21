@@ -9,3 +9,6 @@ Dates in European way
 
 ### Changed
 - Assembly definitions
+
+### Removed
+- Dotween Assembly Reference

@@ -1,4 +1,3 @@
-using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,8 +18,9 @@ namespace Etienne {
         [SerializeField] private float tipDelay = 3f;
         [SerializeField] [TextArea(0, 2)] private string[] tips;
 
+        protected CanvasGroup canvasGroup = null;
+
         private Slider slider;
-        private CanvasGroup canvasGroup = null;
         private int[] loadIndexes = null, unloadIndexes = null;
         private new Camera camera;
 
@@ -78,10 +78,9 @@ namespace Etienne {
             return UnloadLevels(loadIndexes);
         }
 
-        public void StartLoading(bool showLoadingScreen = true, bool loadPaused = true) {
+        public void StartLoading(bool loadPaused = true, bool showLoadingScreen = true) {
             if(showLoadingScreen) {
-                canvasGroup.DOComplete();
-                canvasGroup.DOFade(1f, .2f).SetUpdate(true);
+                ShowLoadingScreen();
                 StartCoroutine(GenerateTips());
             }
             if(loadPaused) Time.timeScale = 0f;
@@ -90,21 +89,14 @@ namespace Etienne {
             unloadIndexes = null;
         }
 
-
         private IEnumerator GenerateTips() {
             int randomTip = UnityEngine.Random.Range(0, tips.Length);
             tip.text = tips[randomTip];
 
-            while(!Mathf.Approximately(canvasGroup.alpha, 0f)) {
+            while(canvasGroup.alpha != 0f) {
                 yield return new WaitForSecondsRealtime(tipDelay);
-                bool isFirstLoop = true;
-                tip.DOFade(0f, .5f).SetLoops(2, LoopType.Yoyo).OnStepComplete(() => {
-                    if(isFirstLoop) {
-                        randomTip = (randomTip + 1) % tips.Length;
-                        tip.text = tips[randomTip];
-                        isFirstLoop = false;
-                    }
-                }).SetUpdate(true);
+                randomTip = (randomTip + 1) % tips.Length;
+                tip.text = tips[randomTip];
             }
         }
 
@@ -142,8 +134,8 @@ namespace Etienne {
             }
 
             SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(loadIndexes[loadIndexes.Length - 1]));
-            canvasGroup.DOComplete();
-            canvasGroup.DOFade(0f, .2f);
+
+            HideLoadingScreen();
 
             Time.timeScale = 1f;
         }
@@ -155,5 +147,9 @@ namespace Etienne {
             }
             LoadLevels(1).UnloadLevels(scenesToUnload.ToArray()).StartLoading();
         }
+
+        protected virtual void ShowLoadingScreen() => canvasGroup.alpha = 1;
+
+        protected virtual void HideLoadingScreen() => canvasGroup.alpha = 0;
     }
 }
