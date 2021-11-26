@@ -110,7 +110,9 @@ namespace Etienne {
         private IEnumerator LoadAsync(int[] loadIndexes, int[] unloadIndexes) {
             slider.value = 0f;
             percent.text = "0%";
+#if !USING_HDRP
             camera.gameObject.SetActive(true);
+#endif
             yield return new WaitForEndOfFrame();
 
             List<AsyncOperation> operations = new List<AsyncOperation>();
@@ -143,7 +145,9 @@ namespace Etienne {
             SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(loadIndexes[loadIndexes.Length - 1]));
 
             HideLoadingScreen();
+#if !USING_HDRP
             camera.gameObject.SetActive(false);
+#endif
 
             Time.timeScale = 1f;
         }
