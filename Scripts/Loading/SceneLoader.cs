@@ -22,12 +22,12 @@ namespace Etienne {
 
         private Slider slider;
         private int[] loadIndexes = null, unloadIndexes = null;
-#if !UNITY_USE_HDRP
+#if !USING_HDRP
         private new Camera camera;
 #endif
 
         private void Start() {
-#if !UNITY_USE_HDRP
+#if !USING_HDRP
             SetupUICamera();
 #endif
             slider = GetComponentInChildren<Slider>();
@@ -35,7 +35,7 @@ namespace Etienne {
             LoadLevels(1).StartLoading();
         }
 
-#if !UNITY_USE_HDRP
+#if !USING_HDRP
         private void SetupUICamera() {
             camera = GameObject.FindObjectOfType<Camera>();
             camera.tag = "Untagged";
