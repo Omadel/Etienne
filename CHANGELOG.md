@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [0.0.6] - 26-11-2021
+### Added
+- No multiples camera in HDRP
+
 ## [0.0.5] - 21-11-2021
 ### Added
 - Changelog

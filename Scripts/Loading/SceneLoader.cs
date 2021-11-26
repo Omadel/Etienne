@@ -22,15 +22,20 @@ namespace Etienne {
 
         private Slider slider;
         private int[] loadIndexes = null, unloadIndexes = null;
+#if !UNITY_USE_HDRP
         private new Camera camera;
+#endif
 
         private void Start() {
+#if !UNITY_USE_HDRP
             SetupUICamera();
+#endif
             slider = GetComponentInChildren<Slider>();
             canvasGroup = GetComponent<CanvasGroup>();
             LoadLevels(1).StartLoading();
         }
 
+#if !UNITY_USE_HDRP
         private void SetupUICamera() {
             camera = GameObject.FindObjectOfType<Camera>();
             camera.tag = "Untagged";
@@ -40,6 +45,7 @@ namespace Etienne {
             camera.cullingMask = 1 << gameObject.layer;
             if(camera.TryGetComponent(out AudioListener audioListener)) Destroy(audioListener);
         }
+#endif
 
         /// <summary>
         /// Use with <see cref="StartLoading()"/>
