@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [0.0.7] - 08/01/2022
+### Added
+- Feedback Editor (instantiate, wait, stop time, play sound)
+
 ## [0.0.6] - 26-11-2021
 ### Added
 - No multiples camera in HDRP
