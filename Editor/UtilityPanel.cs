@@ -92,9 +92,8 @@ namespace EtienneEditor {
                     + (hasUrl ? "" : "Newest version: " + urlVersion));
                 EditorGUILayout.LabelField(label, style);
                 EditorGUILayout.EndHorizontal();
-            } else if(UnityEngine.GUILayout.Button("Check Package")) {
-                VersionChecker.CheckVersion();
             }
+            if(UnityEngine.GUILayout.Button("Check Package")) VersionChecker.CheckVersion();
         }
     }
 }
