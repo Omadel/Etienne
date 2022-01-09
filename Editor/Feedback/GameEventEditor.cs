@@ -12,7 +12,7 @@ namespace EtienneEditor {
         private SerializedProperty feedbacksProperty;
         private ReorderableList feedbacksList;
         private static Type[] types;
-        private static List<string> typesName;
+        private static List<GameFeedbackAttribute> typesAttributes;
 
         private void OnEnable() {
             feedbacksProperty = serializedObject.FindProperty("feedbacks");
@@ -25,8 +25,11 @@ namespace EtienneEditor {
         [InitializeOnLoadMethod]
         private static void UpdateTypes() {
             types = FetchTypes<GameFeedback>();
-            typesName = new List<string>();
-            foreach(Type type in types) typesName.Add(type.Name);
+            typesAttributes = new List<GameFeedbackAttribute>();
+
+            foreach(Type type in types) {
+                typesAttributes.Add(Attribute.GetCustomAttribute(type, typeof(GameFeedbackAttribute)) as GameFeedbackAttribute);
+            }
         }
 
         private static Type[] FetchTypes<T>() where T : class {
@@ -37,11 +40,13 @@ namespace EtienneEditor {
         }
 
         private void AddDropDown(Rect rect, ReorderableList list) {
-
             GenericMenu menu = new GenericMenu();
             for(int i = 0; i < types.Length; i++) {
                 int o = i;
-                menu.AddItem(new GUIContent(typesName[i]), false, () => AddItem(types[o]));
+                if(typesAttributes[i] == null)
+                    menu.AddItem(new GUIContent("No Attribute: " + types[i].Name), false, () => { Debug.Log("No Attribute"); });
+                else
+                    menu.AddItem(new GUIContent(typesAttributes[i].MenuName), false, () => AddItem(types[o]));
             }
             menu.ShowAsContext();
 
@@ -62,7 +67,7 @@ namespace EtienneEditor {
             line.width = 5;
             line.height -= 2;
             line.y += 1;
-            EditorGUI.DrawRect(line, element.FindPropertyRelative("color").colorValue);
+            EditorGUI.DrawRect(line, typesAttributes[index] == null ? Color.white : typesAttributes[index].Color);
             if(!isFocused && !isActive) return;
 
             foreach(SerializedProperty child in GetChildren(element)) {

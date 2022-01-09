@@ -3,9 +3,8 @@ using UnityEngine;
 
 namespace Etienne.Feedback {
     [System.Serializable]
+    [GameFeedback(255, 80, 80, "Stop Time")]
     public class StopTime : GameFeedback {
-        public StopTime() => SetColor(255, 80, 80);
-
         [SerializeField] private float timer;
 
         public override IEnumerator Execute(GameEvent gameEvent) {

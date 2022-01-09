@@ -3,9 +3,8 @@ using UnityEngine;
 
 namespace Etienne.Feedback {
     [System.Serializable]
+    [GameFeedback(255, 153, 51, "Wait")]
     public class Wait : GameFeedback {
-        public Wait() => SetColor(255, 153, 51);
-
         [SerializeField] private bool realtime;
         [SerializeField] private float timer;
 

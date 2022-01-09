@@ -3,9 +3,8 @@ using UnityEngine;
 
 namespace Etienne.Feedback {
     [System.Serializable]
+    [GameFeedback(51, 204, 51, "Instantiate")]
     public class Instantiate : GameFeedback {
-        public Instantiate() => SetColor(51, 204, 51);
-
         [SerializeField] private GameObject prefab;
         [SerializeField] private bool isLocal = true, isChild;
         [SerializeField] private Vector3 position;
