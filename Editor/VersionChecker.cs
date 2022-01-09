@@ -7,9 +7,8 @@ using UnityEngine.Networking;
 
 namespace EtienneEditor {
     public static class VersionChecker {
-        public static string CurrentVersion => EditorPrefs.GetString(EditorPrefsKeys.PackageCurrentVersion, null);
-        public static string UrlVersion => EditorPrefs.GetString(EditorPrefsKeys.PackageUrlVersion, null);
-        private static string currentVersion, urlVersion;
+        public static string CurrentVersion => PlayerPrefs.GetString(EditorPrefsKeys.PackageCurrentVersion, null);
+        public static string UrlVersion => PlayerPrefs.GetString(EditorPrefsKeys.PackageUrlVersion, null);
 
         private const string url = "https://raw.githubusercontent.com/Omadel/Etienne/main/package.json",
             giturl = "https://github.com/Omadel/Etienne.git",
@@ -18,26 +17,26 @@ namespace EtienneEditor {
         private const int timeout = 2000, step = 5;
 
         private static async Task FetchPackageInfosAsync(string packagename) {
+            int time = 0;
             UnityEditor.PackageManager.Requests.ListRequest list = Client.List(true, false);
             while(list.Status == StatusCode.InProgress) {
+                if(time > timeout) break;
+                EditorUtility.DisplayProgressBar("CheckVersion", $"Searching current version", time / timeout);
                 await Task.Delay(step);
+                time += step;
             }
 
             PackageCollection result = list.Result;
             UnityEditor.PackageManager.PackageInfo info = (from packageInfo in list.Result
                                                            where packageInfo.name == packagename
                                                            select packageInfo).First();
-            currentVersion = info.version;
-            EditorPrefs.SetString(EditorPrefsKeys.PackageCurrentVersion, currentVersion);
+            PlayerPrefs.SetString(EditorPrefsKeys.PackageCurrentVersion, info.version);
+            EditorUtility.ClearProgressBar();
         }
 
-        public static async void CheckVersion() {
+        public static async Task FetchUrlVersion(string url) {
             int time = 0;
-
-            await FetchPackageInfosAsync(packageName);
-
             UnityWebRequest web = UnityWebRequest.Get(url);
-            time = 0;
             UnityWebRequestAsyncOperation opertation = web.SendWebRequest();
             while(!opertation.isDone) {
                 if(web.timeout > 5) break;
@@ -46,35 +45,34 @@ namespace EtienneEditor {
                 await Task.Delay(step);
                 time += step;
             }
+
             if(web.result != UnityWebRequest.Result.Success) {
                 Debug.LogError(web.error);
                 web.Dispose();
                 EditorUtility.ClearProgressBar();
-                return;
+            } else {
+                Package json = JsonUtility.FromJson<Package>(web.downloadHandler.text);
+                string version = json.version;
+                PlayerPrefs.SetString(EditorPrefsKeys.PackageUrlVersion, version);
             }
 
-            Package json = JsonUtility.FromJson<Package>(web.downloadHandler.text);
-            string version = json.version;
-            urlVersion = version;
-            EditorPrefs.SetString(EditorPrefsKeys.PackageUrlVersion, urlVersion);
             web.Dispose();
-
             EditorUtility.ClearProgressBar();
-            CompareVersions();
         }
 
-        private static void Error(object message) {
-            Debug.LogError(message);
-            EditorUtility.ClearProgressBar();
-            return;
+        public static async void CheckVersion() {
+            Debug.Log("Check Version");
+            await FetchPackageInfosAsync(packageName);
+            await FetchUrlVersion(url);
+            CompareVersions();
         }
 
         private static void CompareVersions() {
             if(!IsUpToDate()) {
                 if(EditorUtility.DisplayDialog("Your version is old",
                     "Do you want to update ?" + System.Environment.NewLine +
-                    $"Your version: {currentVersion}{System.Environment.NewLine}" +
-                    $"Newest version: {urlVersion}", "Yes", "No")) {
+                    $"Your version: {CurrentVersion}{System.Environment.NewLine}" +
+                    $"Newest version: {UrlVersion}", "Yes", "No")) {
                     UpdatePackage();
                 }
             }
