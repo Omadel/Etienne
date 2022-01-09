@@ -80,19 +80,22 @@ namespace EtienneEditor {
             GUIStyle style = new GUIStyle(GUI.skin.label) {
                 richText = true
             };
-            EditorGUILayout.BeginHorizontal();
             string currentVersion = VersionChecker.CurrentVersion;
             string urlVersion = VersionChecker.UrlVersion;
-            bool hasCurrent = string.IsNullOrEmpty(currentVersion);
-            bool hasUrl = string.IsNullOrEmpty(urlVersion);
-            string color = VersionChecker.IsUpToDate() ? "green" : "red";
-            GUIContent label = new GUIContent((hasCurrent ? "" : $"Current version: <color={color}>" + currentVersion + "</color>")
-                + (!hasCurrent && !hasUrl ? ", " : "")
-                + (hasUrl ? "" : "Newest version: " + urlVersion));
-            EditorGUILayout.LabelField(label, style);
-            EditorGUILayout.EndHorizontal();
-
-            if(UnityEngine.GUILayout.Button("Update Package")) VersionChecker.CheckVersion();
+            bool hasCurrent = currentVersion != "0.0.0";
+            bool hasUrl = urlVersion != "0.0.0";
+            if(hasCurrent && hasUrl) {
+                EditorGUILayout.BeginHorizontal();
+                string color = VersionChecker.IsUpToDate() ? "green" : "red";
+                GUIContent label = new GUIContent((hasCurrent ? "" : $"Current version: <color={color}>" + currentVersion + "</color>")
+                    + (!hasCurrent && !hasUrl ? ", " : "")
+                    + (hasUrl ? "" : "Newest version: " + urlVersion));
+                EditorGUILayout.LabelField(label, style);
+                EditorGUILayout.EndHorizontal();
+                if(UnityEngine.GUILayout.Button("Update Package")) VersionChecker.UpdatePackage();
+            } else if(UnityEngine.GUILayout.Button("Check Package")) {
+                VersionChecker.CheckVersion();
+            }
         }
     }
 }

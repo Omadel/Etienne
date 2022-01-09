@@ -7,8 +7,8 @@ using UnityEngine.Networking;
 
 namespace EtienneEditor {
     public static class VersionChecker {
-        public static string CurrentVersion => PlayerPrefs.GetString(EditorPrefsKeys.PackageCurrentVersion, null);
-        public static string UrlVersion => PlayerPrefs.GetString(EditorPrefsKeys.PackageUrlVersion, null);
+        public static string CurrentVersion => PlayerPrefs.GetString(EditorPrefsKeys.PackageCurrentVersion, "0.0.0");
+        public static string UrlVersion => PlayerPrefs.GetString(EditorPrefsKeys.PackageUrlVersion, "0.0.0");
 
         private const string url = "https://raw.githubusercontent.com/Omadel/Etienne/main/package.json",
             giturl = "https://github.com/Omadel/Etienne.git",
@@ -26,11 +26,11 @@ namespace EtienneEditor {
                 time += step;
             }
 
-            PackageCollection result = list.Result;
-            UnityEditor.PackageManager.PackageInfo info = (from packageInfo in list.Result
+            PackageCollection packages = list.Result;
+            UnityEditor.PackageManager.PackageInfo info = (from packageInfo in packages
                                                            where packageInfo.name == packagename
-                                                           select packageInfo).First();
-            PlayerPrefs.SetString(EditorPrefsKeys.PackageCurrentVersion, info.version);
+                                                           select packageInfo).FirstOrDefault();
+            PlayerPrefs.SetString(EditorPrefsKeys.PackageCurrentVersion, info != null ? info.version : "0.0.0");
             EditorUtility.ClearProgressBar();
         }
 
