@@ -76,10 +76,7 @@ namespace EtienneEditor {
             EditorGUI.DrawRect(line, typesAttributes[index] == null ? Color.white : typesAttributes[index].Color);
             if(!isFocused && !isActive) return;
 
-            foreach(SerializedProperty child in GetChildren(element)) {
-                if(child.name == "color") continue;
-                EditorGUILayout.PropertyField(child);
-            }
+            foreach(SerializedProperty child in GetChildren(element)) EditorGUILayout.PropertyField(child);
 
         }
 
