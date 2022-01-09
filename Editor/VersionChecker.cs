@@ -16,7 +16,7 @@ namespace EtienneEditor {
 
         public static async void CheckVersion() {
             int time = 0, timeout = 2000, step = 5;
-            UnityEditor.PackageManager.Requests.SearchRequest search = Client.Search("com.etienne");
+            UnityEditor.PackageManager.Requests.SearchRequest search = Client.Search("com.etienne", true);
             while(!search.IsCompleted) {
                 if(time > timeout) {
                     Error("Search timeout");
