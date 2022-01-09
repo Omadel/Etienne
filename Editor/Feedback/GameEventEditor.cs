@@ -70,8 +70,7 @@ namespace EtienneEditor {
             line.width = 5;
             line.height -= 2;
             line.y += 1;
-            string type = element.type.Split('<')[1].Trim('>');
-            Debug.Log(type);
+            string type = element.type.Split('<', '>')[1];
             EditorGUI.DrawRect(line, typesAttributes[type] == null ? Color.white : typesAttributes[type].Color);
             if(!isFocused && !isActive) return;
 
