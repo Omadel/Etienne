@@ -35,6 +35,7 @@ namespace EtienneEditor {
         }
 
         public static async Task FetchUrlVersion(string url) {
+            PlayerPrefs.SetString(EditorPrefsKeys.PackageUrlVersion, "0.0.0");
             int time = 0;
             UnityWebRequest web = UnityWebRequest.Get(url);
             UnityWebRequestAsyncOperation opertation = web.SendWebRequest();
