@@ -53,6 +53,7 @@ namespace EtienneEditor {
             } else {
                 Package json = JsonUtility.FromJson<Package>(web.downloadHandler.text);
                 string version = json.version;
+                Debug.Log(version);
                 PlayerPrefs.SetString(EditorPrefsKeys.PackageUrlVersion, version);
             }
 
