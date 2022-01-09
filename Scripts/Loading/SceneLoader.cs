@@ -22,20 +22,15 @@ namespace Etienne {
 
         private Slider slider;
         private int[] loadIndexes = null, unloadIndexes = null;
-#if !USING_HDRP
         private new Camera camera;
-#endif
 
         private void Start() {
-#if !USING_HDRP
             SetupUICamera();
-#endif
             slider = GetComponentInChildren<Slider>();
             canvasGroup = GetComponent<CanvasGroup>();
             LoadLevels(1).StartLoading();
         }
 
-#if !USING_HDRP
         private void SetupUICamera() {
             camera = GameObject.FindObjectOfType<Camera>();
             camera.tag = "Untagged";
@@ -45,7 +40,6 @@ namespace Etienne {
             camera.cullingMask = 1 << gameObject.layer;
             if(camera.TryGetComponent(out AudioListener audioListener)) Destroy(audioListener);
         }
-#endif
 
         /// <summary>
         /// Use with <see cref="StartLoading()"/>
@@ -110,9 +104,7 @@ namespace Etienne {
         private IEnumerator LoadAsync(int[] loadIndexes, int[] unloadIndexes) {
             slider.value = 0f;
             percent.text = "0%";
-#if !USING_HDRP
             camera.gameObject.SetActive(true);
-#endif
             yield return new WaitForEndOfFrame();
 
             List<AsyncOperation> operations = new List<AsyncOperation>();
@@ -145,9 +137,7 @@ namespace Etienne {
             SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(loadIndexes[loadIndexes.Length - 1]));
 
             HideLoadingScreen();
-#if !USING_HDRP
             camera.gameObject.SetActive(false);
-#endif
 
             Time.timeScale = 1f;
         }
