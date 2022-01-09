@@ -53,7 +53,6 @@ namespace EtienneEditor {
             } else {
                 Package json = JsonUtility.FromJson<Package>(web.downloadHandler.text);
                 string version = json.version;
-                Debug.Log(version);
                 PlayerPrefs.SetString(EditorPrefsKeys.PackageUrlVersion, version);
             }
 
@@ -62,7 +61,6 @@ namespace EtienneEditor {
         }
 
         public static async void CheckVersion() {
-            Debug.Log("Check Version");
             await FetchPackageInfosAsync(packageName);
             await FetchUrlVersion(url);
             CompareVersions();
