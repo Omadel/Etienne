@@ -11,7 +11,7 @@ namespace EtienneEditor {
     public class GameEventEditor : Editor<GameEvent> {
         private SerializedProperty feedbacksProperty;
         private ReorderableList feedbacksList;
-        private static Type[] types;
+        private static List<Type> types;
         private static List<GameFeedbackAttribute> typesAttributes;
 
         private void OnEnable() {
@@ -27,25 +27,31 @@ namespace EtienneEditor {
             types = FetchTypes<GameFeedback>();
             typesAttributes = new List<GameFeedbackAttribute>();
 
+            List<Type> typeToRemove = new List<Type>();
+
             foreach(Type type in types) {
-                typesAttributes.Add(Attribute.GetCustomAttribute(type, typeof(GameFeedbackAttribute)) as GameFeedbackAttribute);
+                if(Attribute.GetCustomAttribute(type, typeof(GameFeedbackAttribute)) is GameFeedbackAttribute attribute) typesAttributes.Add(attribute);
+                else typesAttributes.Add(new GameFeedbackAttribute(0, 0, 0, "Skip"));//typeToRemove.Add(type);
+            }
+            for(int i = 0; i < types.Count; i++) {
+                Debug.Log($"type: {types[i]}, name: { typesAttributes[i].MenuName}.");
             }
         }
 
-        private static Type[] FetchTypes<T>() where T : class {
+        private static List<Type> FetchTypes<T>() where T : class {
             return (from domainAssembly in System.AppDomain.CurrentDomain.GetAssemblies()
                     from assemblyType in domainAssembly.GetTypes()
                     where assemblyType.IsSubclassOf(typeof(T))
-                    select assemblyType).ToArray();
+                    select assemblyType).ToList();
         }
 
         private void AddDropDown(Rect rect, ReorderableList list) {
             GenericMenu menu = new GenericMenu();
-            for(int i = 0; i < types.Length; i++) {
+            for(int i = 0; i < types.Count; i++) {
                 int o = i;
                 if(typesAttributes[i] == null)
                     menu.AddItem(new GUIContent("No Attribute: " + types[i].Name), false, () => { Debug.Log("No Attribute"); });
-                else
+                else if(typesAttributes[i].MenuName != "Skip")
                     menu.AddItem(new GUIContent(typesAttributes[i].MenuName), false, () => AddItem(types[o]));
             }
             menu.ShowAsContext();

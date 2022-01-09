@@ -9,6 +9,7 @@ Dates in European way
 ## [0.0.11] - 09/01/2022
 ### Added
 - Feedback editor attribute and menu
+- Skippable feedback
 
 ## [0.0.10] - 09/01/2022
 ### Removed

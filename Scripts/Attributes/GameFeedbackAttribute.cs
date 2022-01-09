@@ -10,7 +10,12 @@ namespace Etienne.Feedback {
         private Color color;
         private string menuName;
 
-        public GameFeedbackAttribute(int r, int g, int b, string menuName) {
+        public GameFeedbackAttribute() {
+            color = Color.white;
+            menuName = "Skip";
+        }
+
+        public GameFeedbackAttribute(int r, int g, int b, string menuName = "Skip") {
             color = new Color(r / 255f, g / 255f, b / 255f);
             this.menuName = menuName;
         }
