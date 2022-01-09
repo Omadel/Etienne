@@ -28,7 +28,7 @@ namespace EtienneEditor {
                 time += step;
             }
             if(search.Error != null) {
-                Error(search.Error);
+                Error(search.Error.message);
                 return;
             }
             foreach(UnityEditor.PackageManager.PackageInfo r in search.Result) {
