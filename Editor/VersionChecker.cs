@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditor.PackageManager;
@@ -11,30 +12,29 @@ namespace EtienneEditor {
         private static string currentVersion, urlVersion;
 
         private const string url = "https://raw.githubusercontent.com/Omadel/Etienne/main/package.json",
-            giturl = "https://github.com/Omadel/Etienne.git";
+            giturl = "https://github.com/Omadel/Etienne.git",
+            packageName = "com.etienne";
 
+        private const int timeout = 2000, step = 5;
+
+        private static async Task FetchPackageInfosAsync(string packagename) {
+            UnityEditor.PackageManager.Requests.ListRequest list = Client.List(true, false);
+            while(list.Status == StatusCode.InProgress) {
+                await Task.Delay(step);
+            }
+
+            PackageCollection result = list.Result;
+            UnityEditor.PackageManager.PackageInfo info = (from packageInfo in list.Result
+                                                           where packageInfo.name == packagename
+                                                           select packageInfo).First();
+            currentVersion = info.version;
+            EditorPrefs.SetString(EditorPrefsKeys.PackageCurrentVersion, currentVersion);
+        }
 
         public static async void CheckVersion() {
-            int time = 0, timeout = 2000, step = 5;
-            UnityEditor.PackageManager.Requests.SearchRequest search = Client.Search("com.etienne", true);
-            while(!search.IsCompleted) {
-                if(time > timeout) {
-                    Error("Search timeout");
-                    return;
-                }
+            int time = 0;
 
-                EditorUtility.DisplayProgressBar("CheckVersion", $"Searching current version {search.Status}", time / (float)timeout);
-                await Task.Delay(step);
-                time += step;
-            }
-            if(search.Error != null) {
-                Error(search.Error.message);
-                return;
-            }
-            foreach(UnityEditor.PackageManager.PackageInfo r in search.Result) {
-                currentVersion = r.version;
-                EditorPrefs.SetString(EditorPrefsKeys.PackageCurrentVersion, currentVersion);
-            }
+            await FetchPackageInfosAsync(packageName);
 
             UnityWebRequest web = UnityWebRequest.Get(url);
             time = 0;
