@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [0.0.8] - 09/01/2022
+### Added
+- Version Checker
+
 ## [0.0.7] - 08/01/2022
 ### Added
 - Feedback Editor (instantiate, wait, stop time, play sound)

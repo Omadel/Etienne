@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEngine;
 
 namespace EtienneEditor {
     public class UtilityPanel : EditorWindow {
@@ -39,6 +40,7 @@ namespace EtienneEditor {
         private void OnValidate() => UpdateFields();
 
         private void OnGUI() {
+            UpdatePackageGUI();
 
             EditorGUI.BeginChangeCheck();
             useDefaultLoader = EditorGUILayout.BeginToggleGroup("Use default loader", useDefaultLoader);
@@ -72,6 +74,25 @@ namespace EtienneEditor {
             EditorGUILayout.EndToggleGroup();
             EditorGUILayout.EndVertical();
 
+        }
+
+        private static void UpdatePackageGUI() {
+            GUIStyle style = new GUIStyle(GUI.skin.label) {
+                richText = true
+            };
+            EditorGUILayout.BeginHorizontal();
+            string currentVersion = VersionChecker.CurrentVersion;
+            string urlVersion = VersionChecker.UrlVersion;
+            bool hasCurrent = string.IsNullOrEmpty(currentVersion);
+            bool hasUrl = string.IsNullOrEmpty(urlVersion);
+            string color = VersionChecker.IsUpToDate() ? "green" : "red";
+            GUIContent label = new GUIContent((hasCurrent ? "" : $"Current version: <color={color}>" + currentVersion + "</color>")
+                + (!hasCurrent && !hasUrl ? ", " : "")
+                + (hasUrl ? "" : "Newest version: " + urlVersion));
+            EditorGUILayout.LabelField(label, style);
+            EditorGUILayout.EndHorizontal();
+
+            if(UnityEngine.GUILayout.Button("Update Package")) VersionChecker.CheckVersion();
         }
     }
 }
