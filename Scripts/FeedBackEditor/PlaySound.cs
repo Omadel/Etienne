@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Etienne.Feedback {
     [System.Serializable]
     public class PlaySound : GameFeedback {
-        public PlaySound() => color = new UnityEngine.Color(0 / 255f, 153 / 255f, 255 / 255f);
+        public PlaySound() => SetColor(0, 153, 255);
 
         [SerializeField] private bool isAttached;
         [SerializeField] private Sound sound = new Sound(null);

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Etienne.Feedback {
     [System.Serializable]
     public class Instantiate : GameFeedback {
-        public Instantiate() => color = new Color(51 / 255f, 204 / 255f, 51 / 255f);
+        public Instantiate() => SetColor(51, 204, 51);
 
         [SerializeField] private GameObject prefab;
         [SerializeField] private bool isLocal = true, isChild;
