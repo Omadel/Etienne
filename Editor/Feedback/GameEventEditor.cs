@@ -27,14 +27,9 @@ namespace EtienneEditor {
             types = FetchTypes<GameFeedback>();
             typesAttributes = new List<GameFeedbackAttribute>();
 
-            List<Type> typeToRemove = new List<Type>();
-
             foreach(Type type in types) {
                 if(Attribute.GetCustomAttribute(type, typeof(GameFeedbackAttribute)) is GameFeedbackAttribute attribute) typesAttributes.Add(attribute);
-                else typesAttributes.Add(new GameFeedbackAttribute(0, 0, 0, "Skip"));//typeToRemove.Add(type);
-            }
-            for(int i = 0; i < types.Count; i++) {
-                Debug.Log($"type: {types[i]}, name: { typesAttributes[i].MenuName}.");
+                else typesAttributes.Add(new GameFeedbackAttribute(0, 0, 0, "Skip"));
             }
         }
 
