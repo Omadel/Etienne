@@ -12,7 +12,8 @@ namespace EtienneEditor {
         private SerializedProperty feedbacksProperty;
         private ReorderableList feedbacksList;
         private static List<Type> types;
-        private static List<GameFeedbackAttribute> typesAttributes;
+        //private static List<GameFeedbackAttribute> typesAttributes;
+        private static Dictionary<string, GameFeedbackAttribute> typesAttributes;
 
         private void OnEnable() {
             feedbacksProperty = serializedObject.FindProperty("feedbacks");
@@ -25,11 +26,12 @@ namespace EtienneEditor {
         [InitializeOnLoadMethod]
         private static void UpdateTypes() {
             types = FetchTypes<GameFeedback>();
-            typesAttributes = new List<GameFeedbackAttribute>();
+            typesAttributes = new Dictionary<string, GameFeedbackAttribute>();
 
             foreach(Type type in types) {
-                if(Attribute.GetCustomAttribute(type, typeof(GameFeedbackAttribute)) is GameFeedbackAttribute attribute) typesAttributes.Add(attribute);
-                else typesAttributes.Add(new GameFeedbackAttribute(0, 0, 0, "Skip"));
+                if(Attribute.GetCustomAttribute(type, typeof(GameFeedbackAttribute)) is GameFeedbackAttribute attribute)
+                    typesAttributes.Add(type.Name, attribute);
+                else typesAttributes.Add(type.Name, new GameFeedbackAttribute(0, 0, 0, "Skip"));
             }
         }
 
@@ -44,10 +46,10 @@ namespace EtienneEditor {
             GenericMenu menu = new GenericMenu();
             for(int i = 0; i < types.Count; i++) {
                 int o = i;
-                if(typesAttributes[i] == null)
+                if(typesAttributes.ElementAt(i).Value == null)
                     menu.AddItem(new GUIContent("No Attribute: " + types[i].Name), false, () => { Debug.Log("No Attribute"); });
-                else if(typesAttributes[i].MenuName != "Skip")
-                    menu.AddItem(new GUIContent(typesAttributes[i].MenuName), false, () => AddItem(types[o]));
+                else if(typesAttributes.ElementAt(i).Value.MenuName != "Skip")
+                    menu.AddItem(new GUIContent(typesAttributes.ElementAt(i).Value.MenuName), false, () => AddItem(types[o]));
             }
             menu.ShowAsContext();
 
@@ -68,13 +70,19 @@ namespace EtienneEditor {
             line.width = 5;
             line.height -= 2;
             line.y += 1;
-            EditorGUI.DrawRect(line, typesAttributes[index] == null ? Color.white : typesAttributes[index].Color);
+            string type = element.type.Split('<')[1].Trim('>');
+            Debug.Log(type);
+            EditorGUI.DrawRect(line, typesAttributes[type] == null ? Color.white : typesAttributes[type].Color);
             if(!isFocused && !isActive) return;
 
             foreach(SerializedProperty child in GetChildren(element)) EditorGUILayout.PropertyField(child);
 
         }
-
+        public static System.Type GetType(SerializedProperty property) {
+            System.Type parentType = property.serializedObject.targetObject.GetType();
+            System.Reflection.FieldInfo fi = parentType.GetField(property.propertyPath);
+            return fi.FieldType;
+        }
         private IEnumerable<SerializedProperty> GetChildren(SerializedProperty property) {
             SerializedProperty currentProperty = property.Copy();
             SerializedProperty nextProperty = property.Copy();
