@@ -75,6 +75,13 @@ namespace EtienneEditor {
                     $"Newest version: {UrlVersion}", "Yes", "No")) {
                     UpdatePackage();
                 }
+            } else {
+                if(EditorUtility.DisplayDialog("Your version is up to date",
+                    "Do you want to re-import ?" + System.Environment.NewLine +
+                    $"Your version: {CurrentVersion}{System.Environment.NewLine}" +
+                    $"Newest version: {UrlVersion}", "Yes", "No")) {
+                    UpdatePackage();
+                }
             }
         }
 
