@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [0.0.12] - 12/01/2022
+### Fixed
+- Force debug mode is renamed to readOnly and now works
+
 ## [0.0.11] - 09/01/2022
 ### Added
 - Feedback editor attribute and menu
