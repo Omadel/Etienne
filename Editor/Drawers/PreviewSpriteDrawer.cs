@@ -9,7 +9,7 @@ namespace EtienneEditor {
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
             if(property.propertyType == SerializedPropertyType.ObjectReference &&
-                (property.objectReferenceValue as Sprite) != null) {
+                property.objectReferenceValue is Sprite) {
                 PreviewSpriteAttribute attr = attribute as PreviewSpriteAttribute;
                 height = attr.Height;
                 return EditorGUI.GetPropertyHeight(property, label, true) + height + 10;
