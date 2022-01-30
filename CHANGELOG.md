@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [0.0.14] - 30/01/2022
+### Added
+- Range (with drawer) and MinMaxRange Attribute
+
 ## [0.0.13] - 12/01/2022
 ### Added
 - Hide if and Show if attributes
