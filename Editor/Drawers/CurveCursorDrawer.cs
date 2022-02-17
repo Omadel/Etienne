@@ -1,4 +1,5 @@
 ﻿using Etienne;
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -18,40 +19,48 @@ namespace EtienneEditor
             SerializedProperty serializedProperty = property.serializedObject.FindProperty(attr.FieldName);
             if(serializedProperty.propertyType == SerializedPropertyType.Float)
             {
-                float min, max;
-                if(string.IsNullOrEmpty(attr.MinField) || string.IsNullOrEmpty(attr.MaxField))
-                {
-                    min = attr.MinValue;
-                    max = attr.MaxValue;
-                } else
-                {
-                    SerializedProperty minField = property.serializedObject.FindProperty(attr.MinField);
-                    SerializedProperty maxField = property.serializedObject.FindProperty(attr.MaxField);
-                    if(minField.propertyType != SerializedPropertyType.Float &&
-                        minField.propertyType != SerializedPropertyType.Integer)
-                    {
-                        Debug.LogWarning("The min field parameter is not a float nor an integer", property.serializedObject.targetObject);
-                        min = attr.MinValue;
-                    } else
-                    {
-                        min = minField.floatValue;
-                    }
-                    if(maxField.propertyType != SerializedPropertyType.Float &&
-                        maxField.propertyType != SerializedPropertyType.Integer)
-                    {
-                        Debug.LogWarning("The max field parameter is not a float nor an integer", property.serializedObject.targetObject);
-                        max = attr.MaxValue;
-                    } else
-                    {
-                        max = maxField.floatValue;
-                    }
-                }
-
+                float min = GetMinValue(property), max = GetMaxValue(property);
                 float x = serializedProperty.floatValue;
                 float normalizedX = x.Normalize(min, max);
                 line.x = (maxX - minX) * normalizedX + minX;
             }
             EditorGUI.DrawRect(line, Color.red);
+        }
+
+        private float GetMinValue(SerializedProperty property)
+        {
+            CurveCursorAttribute attr = attribute as CurveCursorAttribute;
+            if(string.IsNullOrEmpty(attr.MinField)) return attr.MinValue;
+            SerializedProperty field = property.serializedObject.FindProperty(attr.MinField);
+            if(field.propertyType == SerializedPropertyType.Float)
+            {
+                return field.floatValue;
+            } else if(field.propertyType == SerializedPropertyType.Integer)
+            {
+                return field.intValue;
+            } else
+            {
+                Debug.LogWarning("The min field parameter is not a float nor an integer", property.serializedObject.targetObject);
+                return attr.MinValue;
+            }
+        }
+
+        private float GetMaxValue(SerializedProperty property)
+        {
+            CurveCursorAttribute attr = attribute as CurveCursorAttribute;
+            if(string.IsNullOrEmpty(attr.MaxField)) return attr.MaxValue;
+            SerializedProperty field = property.serializedObject.FindProperty(attr.MaxField);
+            if(field.propertyType == SerializedPropertyType.Float)
+            {
+                return field.floatValue;
+            } else if(field.propertyType == SerializedPropertyType.Integer)
+            {
+                return field.intValue;
+            } else
+            {
+                Debug.LogWarning("The min field parameter is not a float nor an integer", property.serializedObject.targetObject);
+                return attr.MaxValue;
+            }
         }
     }
 }

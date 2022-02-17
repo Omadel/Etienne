@@ -22,11 +22,14 @@ namespace Etienne
             FieldName = fieldName;
             MinField = minField;
             MaxField = maxField;
+            MinValue = 0;
+            MaxValue = 1;
         }
         public CurveCursorAttribute(string fieldName, float min, string maxField)
         {
             FieldName = fieldName;
             MinValue = min;
+            MaxValue = 1;
             MaxField = maxField;
         }
         public CurveCursorAttribute(string fieldName, string minField, float max = 1)
@@ -34,6 +37,7 @@ namespace Etienne
             FieldName = fieldName;
             MinField = minField;
             MaxValue = max;
+            MinValue = 0;
         }
     }
 }
