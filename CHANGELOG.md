@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [0.0.15] - 17/02/2022
+### Added
+- Normalizable float extension in Etienne.Utils
+- CurveCursor drawer and attribute
+
 ## [0.0.14] - 30/01/2022
 ### Added
 - Range (with drawer) and MinMaxRange Attribute
