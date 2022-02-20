@@ -1,8 +1,10 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace EtienneEditor {
-    public class UtilityPanel : EditorWindow {
+namespace EtienneEditor
+{
+    public class UtilityPanel : EditorWindow
+    {
 
         private const string windowName = "Etienne Utility Panel";
 
@@ -12,34 +14,50 @@ namespace EtienneEditor {
         private int defaultSceneBuildIndex;
         private string[] buildSceneNames;
 
-        [MenuItem("Tools/Etienne/" + windowName)]
-        private static void ShowWindow() {
+        [MenuItem("Tools/Etienne/" + windowName, priority = -100)]
+        private static void ShowWindow()
+        {
             UtilityPanel window = GetWindow<UtilityPanel>(true, windowName);
             window.minSize = new UnityEngine.Vector2(369, 400);
             window.maxSize = window.minSize;
         }
 
-        private void UpdateFields() {
+        private void UpdateFields()
+        {
             useDefaultLoader = EditorPrefs.GetBool(EditorPrefsKeys.UseDefaultLoader, false);
             defaultSceneBuildIndex = EditorPrefs.GetInt(EditorPrefsKeys.DefaultSceneBuildIndex, 0);
             goBackToCurrentScene = EditorPrefs.GetBool(EditorPrefsKeys.GoBackToCurrentScene, true);
             saveCurrentScene = EditorPrefs.GetBool(EditorPrefsKeys.AutoSaveCurrentScene, false);
 
             buildSceneNames = new string[EditorBuildSettings.scenes.Length];
-            for(int i = 0; i < buildSceneNames.Length; i++) {
+            for(int i = 0; i < buildSceneNames.Length; i++)
+            {
                 string name = System.IO.Path.GetFileNameWithoutExtension(EditorBuildSettings.scenes[i].path);
                 buildSceneNames[i] = name;
             }
-            if(defaultSceneBuildIndex >= buildSceneNames.Length) {
+            if(defaultSceneBuildIndex >= buildSceneNames.Length)
+            {
                 defaultSceneBuildIndex = 0;
                 EditorPrefs.SetInt(EditorPrefsKeys.DefaultSceneBuildIndex, 0);
             }
         }
-        private void OnEnable() => UpdateFields();
-        private void OnFocus() => UpdateFields();
-        private void OnValidate() => UpdateFields();
+        private void OnEnable()
+        {
+            UpdateFields();
+        }
 
-        private void OnGUI() {
+        private void OnFocus()
+        {
+            UpdateFields();
+        }
+
+        private void OnValidate()
+        {
+            UpdateFields();
+        }
+
+        private void OnGUI()
+        {
             UpdatePackageGUI();
 
             EditorGUI.BeginChangeCheck();
@@ -50,7 +68,8 @@ namespace EtienneEditor {
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUILayout.LabelField("Default scene", EditorStyles.boldLabel);
             UnityEngine.GUIStyle rightAlignedStyle = new UnityEngine.GUIStyle(EditorStyles.label) { alignment = UnityEngine.TextAnchor.MiddleRight, padding = new UnityEngine.RectOffset(0, 5, 0, 0) };
-            for(int i = 0; i < buildSceneNames.Length; i++) {
+            for(int i = 0; i < buildSceneNames.Length; i++)
+            {
                 EditorGUILayout.BeginHorizontal();
                 UnityEngine.Rect rect = EditorGUILayout.GetControlRect();
 
@@ -76,15 +95,18 @@ namespace EtienneEditor {
 
         }
 
-        private static void UpdatePackageGUI() {
-            GUIStyle style = new GUIStyle(GUI.skin.label) {
+        private static void UpdatePackageGUI()
+        {
+            GUIStyle style = new GUIStyle(GUI.skin.label)
+            {
                 richText = true
             };
             string currentVersion = VersionChecker.CurrentVersion;
             string urlVersion = VersionChecker.UrlVersion;
             bool hasCurrent = currentVersion != "0.0.0";
             bool hasUrl = urlVersion != "0.0.0";
-            if(hasCurrent && hasUrl) {
+            if(hasCurrent && hasUrl)
+            {
                 EditorGUILayout.BeginHorizontal();
                 string color = VersionChecker.IsUpToDate() ? "green" : "red";
                 GUIContent label = new GUIContent((hasCurrent ? "" : $"Current version: <color={color}>" + currentVersion + "</color>")
