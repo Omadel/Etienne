@@ -17,10 +17,12 @@ namespace EtienneEditor
             line.width = 1f;
             CurveCursorAttribute attr = attribute as CurveCursorAttribute;
             SerializedProperty serializedProperty = property.serializedObject.FindProperty(attr.FieldName);
-            if(serializedProperty.propertyType == SerializedPropertyType.Float)
+            if(serializedProperty.propertyType == SerializedPropertyType.Float ||
+                serializedProperty.propertyType == SerializedPropertyType.Integer)
             {
                 float min = GetMinValue(property), max = GetMaxValue(property);
-                float x = serializedProperty.floatValue;
+                Debug.Log($"Min: {min}, Max: :{max}");
+                float x = serializedProperty.propertyType == SerializedPropertyType.Float ? serializedProperty.floatValue : serializedProperty.intValue;
                 float normalizedX = x.Normalize(min, max);
                 line.x = (maxX - minX) * normalizedX + minX;
             }
