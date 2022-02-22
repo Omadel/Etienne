@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [0.1.0] - 22/02/2022
+### Added
+- Even More Keyboard shortcuts !:  
+ ALT+R to reset transform
+ ALT+N to reset GameObject name
+ ALT+A to apply prefab
+ ALT+Ctrl+A to revert prefab
+
 ## [0.0.16] - 22/02/2022
 ### Added
 - Keyboard shortcuts : 
