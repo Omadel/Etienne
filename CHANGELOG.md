@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+##[0.0.16] - 22/02/2022
+### Added
+- Keyboard shortcuts : 
+-- ALT+E to lock/unlock inspector
+-- ALT+D to debug/normal inspector mode
+-- ALT+C to clear console
+
 ## [0.0.15] - 17/02/2022
 ### Added
 - Normalizable float extension in Etienne.Utils

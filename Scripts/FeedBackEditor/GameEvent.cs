@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Etienne.Feedback {
-    [CreateAssetMenu(menuName = "GameEvent")]
+    [CreateAssetMenu(menuName = "Etienne/GameEvent",order = 100)]
     public class GameEvent : ScriptableObject {
         public List<GameFeedback> Feedbacks => feedbacks;
         [SerializeReference] private List<GameFeedback> feedbacks;
