@@ -2,17 +2,24 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace EtienneEditor {
+namespace EtienneEditor
+{
 
     [InitializeOnLoad, ExecuteAlways]
-    public static class DefaultLoader {
+    public static class DefaultLoader
+    {
 
-        static DefaultLoader() => EditorApplication.playModeStateChanged += LoadDefaultScene;
+        static DefaultLoader()
+        {
+            EditorApplication.playModeStateChanged += LoadDefaultScene;
+        }
 
-        private static void LoadDefaultScene(PlayModeStateChange state) {
-            if(!EditorPrefs.GetBool(EditorPrefsKeys.UseDefaultLoader, false)) return;
+        private static void LoadDefaultScene(PlayModeStateChange state)
+        {
+            if(!PrefsKeys.UseDefaultLoader) return;
 
-            switch(state) {
+            switch(state)
+            {
                 case PlayModeStateChange.EnteredEditMode:
                     GoBackToCurrentScene();
                     break;
@@ -27,8 +34,9 @@ namespace EtienneEditor {
             }
         }
 
-        private static void LoadDefaultScene() {
-            int sceneBuildIndex = EditorPrefs.GetInt(EditorPrefsKeys.DefaultSceneBuildIndex, 0);
+        private static void LoadDefaultScene()
+        {
+            int sceneBuildIndex = PrefsKeys.DefaultSceneBuildIndex;
             if(EditorSceneManager.GetActiveScene() == EditorSceneManager.GetSceneByBuildIndex(sceneBuildIndex)) return;
 
             Debug.Log($"<b>Etienne Default Loader</b> <color=green>used</color>, loading default scene{System.Environment.NewLine}To change the settings go to <b>Tools>Etienne>Etienne Utility Panel</b>");
@@ -36,24 +44,28 @@ namespace EtienneEditor {
             EditorSceneManager.LoadScene(sceneBuildIndex);
         }
 
-        private static void GoBackToCurrentScene() {
-            if(!EditorPrefs.GetBool(EditorPrefsKeys.GoBackToCurrentScene, true)) return;
+        private static void GoBackToCurrentScene()
+        {
+            if(!PrefsKeys.GoBackToCurrentScene) return;
 
-            string name = EditorPrefs.GetString(EditorPrefsKeys.CurrentSceneName);
+            string name = PrefsKeys.CurrentSceneName.GetValue();
             if(string.IsNullOrEmpty(name)) return;
             EditorSceneManager.LoadScene(name);
         }
 
-        private static void SaveCurrentScene() {
-            if(!EditorPrefs.GetBool(EditorPrefsKeys.AutoSaveCurrentScene, false)) {
+        private static void SaveCurrentScene()
+        {
+            if(!PrefsKeys.AutoSaveCurrentScene)
+            {
                 if(!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) EditorApplication.ExitPlaymode();
-            } else {
+            } else
+            {
                 EditorSceneManager.SaveOpenScenes();
             }
 
-            if(!EditorPrefs.GetBool(EditorPrefsKeys.GoBackToCurrentScene, true)) return;
+            if(!PrefsKeys.GoBackToCurrentScene) return;
 
-            EditorPrefs.SetString(EditorPrefsKeys.CurrentSceneName, System.IO.Path.GetFileNameWithoutExtension(EditorSceneManager.GetActiveScene().path));
+            PrefsKeys.CurrentSceneName.SetValue(System.IO.Path.GetFileNameWithoutExtension(EditorSceneManager.GetActiveScene().path));
         }
     }
 }

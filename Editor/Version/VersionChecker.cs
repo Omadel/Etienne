@@ -5,100 +5,116 @@ using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace EtienneEditor {
-    public static class VersionChecker {
-        public static string CurrentVersion => PlayerPrefs.GetString(EditorPrefsKeys.PackageCurrentVersion, "0.0.0");
-        public static string UrlVersion => PlayerPrefs.GetString(EditorPrefsKeys.PackageUrlVersion, "0.0.0");
+namespace EtienneEditor
+{
+    internal static class VersionChecker
+    {
+        private static string CurrentVersion => PrefsKeys.PackageCurrentVersion;
+        private static string UrlVersion => PrefsKeys.PackageUrlVersion;
 
-        private const string url = "https://raw.githubusercontent.com/Omadel/Etienne/main/package.json",
-            giturl = "https://github.com/Omadel/Etienne.git",
-            packageName = "com.etienne";
+        private const string _Url = "https://raw.githubusercontent.com/Omadel/Etienne/main/package.json";
+        private const string _Giturl = "https://github.com/Omadel/Etienne.git";
+        private const string _PackageName = "com.etienne";
 
-        private const int timeout = 2000, step = 5;
+        private const int _Timeout = 2000, _Step = 5;
 
-        private static async Task FetchPackageInfosAsync(string packagename) {
+        private static async Task FetchPackageInfosAsync(string packagename)
+        {
             int time = 0;
             UnityEditor.PackageManager.Requests.ListRequest list = Client.List(true, false);
-            while(list.Status == StatusCode.InProgress) {
-                if(time > timeout) break;
-                EditorUtility.DisplayProgressBar("CheckVersion", $"Searching current version", time / timeout);
-                await Task.Delay(step);
-                time += step;
+            while(list.Status == StatusCode.InProgress)
+            {
+                if(time > _Timeout) break;
+                EditorUtility.DisplayProgressBar("CheckVersion", $"Searching current version", time / _Timeout);
+                await Task.Delay(_Step);
+                time += _Step;
             }
 
             PackageCollection packages = list.Result;
             UnityEditor.PackageManager.PackageInfo info = (from packageInfo in packages
                                                            where packageInfo.name == packagename
                                                            select packageInfo).FirstOrDefault();
-            PlayerPrefs.SetString(EditorPrefsKeys.PackageCurrentVersion, info != null ? info.version : "0.0.0");
+            PrefsKeys.PackageCurrentVersion.SetValue(info != null ? info.version : "0.0.0");
             EditorUtility.ClearProgressBar();
         }
 
-        public static async Task FetchUrlVersion(string url) {
-            PlayerPrefs.SetString(EditorPrefsKeys.PackageUrlVersion, "0.0.0");
+        private static async Task FetchUrlVersion(string url)
+        {
             int time = 0;
             UnityWebRequest web = UnityWebRequest.Get(url);
             UnityWebRequestAsyncOperation opertation = web.SendWebRequest();
-            while(!opertation.isDone) {
+            while(!opertation.isDone)
+            {
                 if(web.timeout > 5) break;
-                if(time > timeout) break;
+                if(time > _Timeout) break;
                 EditorUtility.DisplayProgressBar("CheckVersion", $"Searching newest version", opertation.progress + .75f);
-                await Task.Delay(step);
-                time += step;
+                await Task.Delay(_Step);
+                time += _Step;
             }
 
-            if(web.result != UnityWebRequest.Result.Success) {
+            if(web.result != UnityWebRequest.Result.Success)
+            {
                 Debug.LogError(web.error);
                 web.Dispose();
                 EditorUtility.ClearProgressBar();
-            } else {
+                PrefsKeys.PackageUrlVersion.SetValue("0.0.0");
+            } else
+            {
                 Package json = JsonUtility.FromJson<Package>(web.downloadHandler.text);
                 string version = json.version;
-                PlayerPrefs.SetString(EditorPrefsKeys.PackageUrlVersion, version);
+                PrefsKeys.PackageUrlVersion.SetValue(version);
             }
 
             web.Dispose();
             EditorUtility.ClearProgressBar();
         }
 
-        public static async void CheckVersion() {
-            await FetchPackageInfosAsync(packageName);
-            await FetchUrlVersion(url);
+        [InitializeOnLoadMethod]
+        private static async void UpdateCheckVersion()
+        {
+            await FetchUrlVersion(_Url);
+            if(!IsUpToDate()) Debug.LogWarning("Etienne is not up to date, consider updating.");
+        }
+
+        internal static async void CheckVersion()
+        {
+            await FetchPackageInfosAsync(_PackageName);
+            await FetchUrlVersion(_Url);
             CompareVersions();
         }
 
-        private static void CompareVersions() {
-            if(!IsUpToDate()) {
-                if(EditorUtility.DisplayDialog("Your version is old",
-                    "Do you want to update ?" + System.Environment.NewLine +
-                    $"Your version: {CurrentVersion}{System.Environment.NewLine}" +
-                    $"Newest version: {UrlVersion}", "Yes", "No")) {
-                    UpdatePackage();
-                }
-            } else {
-                if(EditorUtility.DisplayDialog("Your version is up to date",
-                    "Do you want to re-import ?" + System.Environment.NewLine +
-                    $"Your version: {CurrentVersion}{System.Environment.NewLine}" +
-                    $"Newest version: {UrlVersion}", "Yes", "No")) {
-                    UpdatePackage();
-                }
+        private static void CompareVersions()
+        {
+            bool isUpToDate = IsUpToDate();
+            if(EditorUtility.DisplayDialog($"Your version is {(isUpToDate ? "up to date" : "old")}",
+                $"Do you want to {(isUpToDate ? "update" : "re-import")} ?"
+                + System.Environment.NewLine +
+                $"Your version: {CurrentVersion}"
+                + System.Environment.NewLine +
+                $"Newest version: {UrlVersion}", "Yes", "No"))
+            {
+                UpdatePackage();
             }
         }
 
-        public static bool IsUpToDate() {
+        internal static bool IsUpToDate()
+        {
             string[] cVer = CurrentVersion.Split('.');
             string[] urlVer = UrlVersion.Split('.');
-            for(int i = 0; i < 3; i++) {
+            for(int i = 0; i < 3; i++)
+            {
                 if(int.Parse(cVer[i]) < int.Parse(urlVer[i])) return false;
                 if(int.Parse(cVer[i]) > int.Parse(urlVer[i])) return true;
             }
             return true;
         }
 
-        public static async void UpdatePackage() {
+        private static async void UpdatePackage()
+        {
             int time = 0, timeout = 20000, step = 5;
-            UnityEditor.PackageManager.Requests.AddRequest update = Client.Add(giturl);
-            while(!update.IsCompleted) {
+            UnityEditor.PackageManager.Requests.AddRequest update = Client.Add(_Giturl);
+            while(!update.IsCompleted)
+            {
                 if(time > timeout) break;
                 await Task.Delay(step);
                 time += step;
@@ -109,7 +125,8 @@ namespace EtienneEditor {
 
 
         [System.Serializable]
-        private class Package {
+        private class Package
+        {
             public string name;
             public string displayName;
             public string version;
@@ -119,13 +136,14 @@ namespace EtienneEditor {
             public bool enableLockFile;
             public string resolutionStrategy;
             public Sample[] samples;
+            [System.Serializable]
+            public class Sample
+            {
+                public string displayName;
+                public string description;
+                public string path;
+            }
         }
 
-        [System.Serializable]
-        private class Sample {
-            public string displayName;
-            public string description;
-            public string path;
-        }
     }
 }

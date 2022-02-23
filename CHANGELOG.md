@@ -13,6 +13,8 @@ Dates in European way
  ALT+N to reset GameObject name
  ALT+A to apply prefab
  ALT+Ctrl+A to revert prefab
+- EditorPrefs to PlayerPrefs to keep parameters inside individual projects
+- Better Utility panel
 
 ## [0.0.16] - 22/02/2022
 ### Added
