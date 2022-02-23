@@ -131,7 +131,7 @@ namespace EtienneEditor
 
             EditorGUILayout.BeginHorizontal();
 
-            string color = VersionChecker.IsUpToDate() ? "green" : "red";
+            string color = VersionChecker.IsUpToDate() ? EditorHexColor.Green : EditorHexColor.Red;
             GUIContent label =
                 new GUIContent($"Current version: <color={color}> {PrefsKeys.PackageCurrentVersion.GetValue()} </color>, Newest version: {PrefsKeys.PackageUrlVersion.GetValue()}");
             EditorGUILayout.LabelField(label, style);

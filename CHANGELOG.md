@@ -15,6 +15,7 @@ Dates in European way
  ALT+Ctrl+A to revert prefab
 - EditorPrefs to PlayerPrefs to keep parameters inside individual projects
 - Better Utility panel
+- Better Editor Base Colors
 
 ## [0.0.16] - 22/02/2022
 ### Added
