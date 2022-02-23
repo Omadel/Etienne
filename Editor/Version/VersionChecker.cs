@@ -87,7 +87,7 @@ namespace EtienneEditor
         {
             bool isUpToDate = IsUpToDate();
             if(EditorUtility.DisplayDialog($"Your version is {(isUpToDate ? "up to date" : "old")}",
-                $"Do you want to {(isUpToDate ? "update" : "re-import")} ?"
+                $"Do you want to {(isUpToDate ? "re-import" : "update")} ?"
                 + System.Environment.NewLine +
                 $"Your version: {CurrentVersion}"
                 + System.Environment.NewLine +
