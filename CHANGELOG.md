@@ -9,6 +9,7 @@ Dates in European way
 ## [0.1.1] - 28/02/2022
 ### Fixed
 - UserPref Creation
+- Normalize now normalizes le variable
 
 ## [0.1.0] - 22/02/2022
 ### Added

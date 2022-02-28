@@ -13,9 +13,9 @@ namespace Etienne
         }
 
 
-        public static float Normalize(this float x, float min, float max)
+        public static float Normalize(ref this float x, float min, float max)
         {
-            return (x - min) / (max - min); ;
+            return x = (x - min) / (max - min); ;
         }
     }
 }
