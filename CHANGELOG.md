@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [0.1.1] - 28/02/2022
+### Fixed
+- UserPref Creation
+
 ## [0.1.0] - 22/02/2022
 ### Added
 - Even More Keyboard shortcuts !:  

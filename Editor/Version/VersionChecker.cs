@@ -72,6 +72,7 @@ namespace EtienneEditor
         [InitializeOnLoadMethod]
         private static async void UpdateCheckVersion()
         {
+            if(string.IsNullOrEmpty(CurrentVersion)) await FetchPackageInfosAsync(_PackageName);
             await FetchUrlVersion(_Url);
             if(!IsUpToDate()) Debug.LogWarning("Etienne is not up to date, consider updating.");
         }
