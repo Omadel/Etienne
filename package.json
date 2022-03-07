@@ -12,12 +12,12 @@
       "displayName": "Loading Screen",
       "description": "Contains sample scenes using my loading system",
       "path": "Samples~/SampleLoadingScreen"
-    }
+    },
     {
       "displayName": "Dotween",
       "description": "Contains Dotween Specifics",
       "path": "Samples~/DotweenSample"
-    }
+    },
     {
       "displayName": "Cinemachine",
       "description": "Contains Cinemachine Specifics",
