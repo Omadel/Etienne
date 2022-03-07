@@ -25,7 +25,7 @@ namespace EtienneEditor
             while(list.Status == StatusCode.InProgress)
             {
                 if(time > _Timeout) break;
-                EditorUtility.DisplayProgressBar("CheckVersion", $"Searching current version", time / _Timeout);
+                UnityEditor.EditorUtility.DisplayProgressBar("CheckVersion", $"Searching current version", time / _Timeout);
                 await Task.Delay(_Step);
                 time += _Step;
             }
@@ -35,7 +35,7 @@ namespace EtienneEditor
                                                            where packageInfo.name == packagename
                                                            select packageInfo).FirstOrDefault();
             PrefsKeys.PackageCurrentVersion.SetValue(info != null ? info.version : "0.0.0");
-            EditorUtility.ClearProgressBar();
+            UnityEditor.EditorUtility.ClearProgressBar();
         }
 
         private static async Task FetchUrlVersion(string url)
@@ -47,7 +47,7 @@ namespace EtienneEditor
             {
                 if(web.timeout > 5) break;
                 if(time > _Timeout) break;
-                EditorUtility.DisplayProgressBar("CheckVersion", $"Searching newest version", opertation.progress + .75f);
+                UnityEditor.EditorUtility.DisplayProgressBar("CheckVersion", $"Searching newest version", opertation.progress + .75f);
                 await Task.Delay(_Step);
                 time += _Step;
             }
@@ -56,7 +56,7 @@ namespace EtienneEditor
             {
                 Debug.LogError(web.error);
                 web.Dispose();
-                EditorUtility.ClearProgressBar();
+                UnityEditor.EditorUtility.ClearProgressBar();
                 PrefsKeys.PackageUrlVersion.SetValue("0.0.0");
             } else
             {
@@ -66,7 +66,7 @@ namespace EtienneEditor
             }
 
             web.Dispose();
-            EditorUtility.ClearProgressBar();
+            UnityEditor.EditorUtility.ClearProgressBar();
         }
 
         [InitializeOnLoadMethod]
@@ -87,7 +87,7 @@ namespace EtienneEditor
         private static void CompareVersions()
         {
             bool isUpToDate = IsUpToDate();
-            if(EditorUtility.DisplayDialog($"Your version is {(isUpToDate ? "up to date" : "old")}",
+            if(UnityEditor.EditorUtility.DisplayDialog($"Your version is {(isUpToDate ? "up to date" : "old")}",
                 $"Do you want to {(isUpToDate ? "re-import" : "update")} ?"
                 + System.Environment.NewLine +
                 $"Your version: {CurrentVersion}"

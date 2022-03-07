@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace EtienneEditor
 {
+
     internal sealed class EditorShortcut
     {
         private const string MenuName = " Tools/Etienne/";
@@ -26,7 +27,7 @@ namespace EtienneEditor
         [MenuItem(MenuName + "Clear Console &c", false, MenuOrder)]
         private static void ClearConsole()
         {
-            Etienne.Utils.ClearLog();
+            EditorUtility.ClearConsole();
         }
 
         [MenuItem(MenuName + "Toggle Inspector Lock &e", true, MenuOrder + 1)]

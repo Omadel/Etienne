@@ -10,10 +10,10 @@ namespace EtienneEditor {
             for(int i = 0; i < assets.Length; i++) {
                 string path = AssetDatabase.GUIDToAssetPath(assets[i]);
                 InitializableScriptableObject staticSO = AssetDatabase.LoadAssetAtPath<InitializableScriptableObject>(path);
-                EditorUtility.DisplayProgressBar("Initialize Scriptable Objects", $"{staticSO.name}", (float)i / assets.Length);
+                UnityEditor.EditorUtility.DisplayProgressBar("Initialize Scriptable Objects", $"{staticSO.name}", (float)i / assets.Length);
                 staticSO.Initialize();
             }
-            EditorUtility.ClearProgressBar();
+            UnityEditor.EditorUtility.ClearProgressBar();
         }
     }
 }
