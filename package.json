@@ -1,7 +1,7 @@
 {
   "name": "com.etienne",
   "displayName": "Etienne",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Etienne's Plugins.",
   "unity": "2020.3",
   "author": "Etienne Javelle",
@@ -12,6 +12,16 @@
       "displayName": "Loading Screen",
       "description": "Contains sample scenes using my loading system",
       "path": "Samples~/SampleLoadingScreen"
+    }
+    {
+      "displayName": "Dotween",
+      "description": "Contains Dotween Specifics",
+      "path": "Samples~/DotweenSample"
+    }
+    {
+      "displayName": "Cinemachine",
+      "description": "Contains Cinemachine Specifics",
+      "path": "Samples~/CinemachineSample"
     }
   ]
 }
