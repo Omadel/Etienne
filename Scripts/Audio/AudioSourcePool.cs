@@ -7,20 +7,16 @@ namespace Etienne.Pools
         public static async void Play(Etienne.Sound sound, Transform transform = null)
         {
             AudioSource source = instance.Dequeue();
-            source.clip = sound.Clip;
-            source.loop = sound.Parameters.Loop;
-            source.pitch = sound.Parameters.Pitch;
-            source.spatialBlend = sound.Parameters.SpacialBlend;
-            source.volume = sound.Parameters.Volume;
+            source.SetSoundToSource(sound);
             source.Play();
-            if(transform != null)
+            if (transform != null)
             {
                 source.transform.parent = transform;
                 source.transform.localPosition = Vector3.zero;
             }
-            while(source != null && source.isPlaying)
+            while (source != null && source.isPlaying)
             {
-                if(!Application.isPlaying) return;
+                if (!Application.isPlaying) return;
                 await System.Threading.Tasks.Task.Delay(100);
             }
 

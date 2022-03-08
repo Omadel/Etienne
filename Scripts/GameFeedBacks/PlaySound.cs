@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Etienne.Feedback
 {
-    using Pools;
     [System.Serializable]
     [GameFeedback(0, 153, 255, "Audio/PlaySound")]
     public class PlaySound : GameFeedback
@@ -14,8 +13,7 @@ namespace Etienne.Feedback
 
         public override IEnumerator Execute(GameEvent gameEvent)
         {
-            if(AudioSourcePool.Instance == null) AudioSourcePool.CreateInstance<AudioSourcePool>(100);
-            AudioSourcePool.Play(_Cue, _IsAttached ? gameEvent.GameObject.transform : null);
+            _Cue.Play(_IsAttached ? gameEvent.GameObject.transform : null);
             yield break;
         }
 
