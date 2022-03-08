@@ -9,6 +9,9 @@ Dates in European way
 ## [0.1.4] - 8/03/2022
 ### Modified
 - Audio sounds,Cues and drawers
+### Added
+- Hideif/showif object compatibility
+- Sound PArameters Scriptable Objects
 
 ## [0.1.3] - 7/03/2022
 ### Added
