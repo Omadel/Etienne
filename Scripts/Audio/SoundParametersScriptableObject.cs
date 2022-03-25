@@ -7,7 +7,7 @@ namespace Etienne
     {
         public SoundParameters Parameters => _Parameters;
 
-        [SerializeField] private SoundParameters _Parameters;
+        [SerializeField] private SoundParameters _Parameters = new SoundParameters(null);
 
 
         public static implicit operator SoundParameters(SoundParametersScriptableObject parameters)

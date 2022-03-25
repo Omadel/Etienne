@@ -10,7 +10,6 @@ namespace Etienne
         public int Priority => priority;
         public float Volume => volume;
         public float Pitch => pitch;
-        public bool Loop => loop;
         public float StereoPan => stereoPan;
         public int SpacialBlend => spacialBlend;
         public bool Is2D => spacialBlend == 0;
@@ -26,7 +25,6 @@ namespace Etienne
         [SerializeField] private float volume;
         [UnityEngine.Range(.1f, 3)]
         [SerializeField] private float pitch;
-        [SerializeField] private bool loop;
         [RangeLabelled(-1f, 1f, "Left", "Right")]
         [SerializeField] private float stereoPan;
         [RangeLabelled(0, 1, "2D", "3D")]
@@ -40,7 +38,6 @@ namespace Etienne
             priority = 128;
             volume = 1f;
             pitch = 1f;
-            loop = false;
             stereoPan = 0;
             spacialBlend = 0;
             minDistance = 1;

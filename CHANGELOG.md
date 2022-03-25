@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [2022.0.0] - 24/03/2022
+### Changed
+- version is now with year
+### Modified
+- Audio sound can now loop and be stopped
+- Audio parameters can no longer loop (use above)
+- Audio cues don't anymore log default error when empty
+
 ## [0.1.4] - 8/03/2022
 ### Modified
 - Audio sounds,Cues and drawers

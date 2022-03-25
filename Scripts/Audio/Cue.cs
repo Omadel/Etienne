@@ -41,20 +41,26 @@ namespace Etienne
             return (_Clips == null || _Clips.Length == 0) ? "Nothing" : $"Cue of {_Clips.Length} clips";
         }
 
-        public void Play(int index, Transform transform = null)
+        public AudioSource Play(int index, Transform transform = null)
         {
-            if (index < 0 || index >= _Clips.Length)
-            {
-                Sound.Play(transform);
-                Debug.LogWarning("Index out of range, played random sound instead.");
-                return;
-            }
-            new Sound(_Clips[index], _Parameters).Play(transform);
+            return Pools.AudioSourcePool.Play(this, index, transform);
         }
 
-        public void Play(Transform transform = null)
+        public AudioSource Play(Transform transform = null)
         {
-            Sound.Play(transform);
+            if (_Clips == null || _Clips.Length <= 0)
+            {
+                Debug.LogError("Cue is empty");
+                return null;
+            }
+            Sound sound = Sound;
+            if (sound.Clip == null)
+            {
+                Debug.LogError("Clip in cue is empty");
+                return null;
+            }
+
+            return sound.Play(transform);
         }
     }
 }

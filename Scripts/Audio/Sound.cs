@@ -33,10 +33,13 @@ namespace Etienne
             _Parameters = parameters;
         }
 
-        public void Play(Transform transform = null)
+        public AudioSource Play(Transform transform = null)
         {
-            if (Pools.AudioSourcePool.Instance == null) Pools.AudioSourcePool.CreateInstance<Pools.AudioSourcePool>(100);
-            Pools.AudioSourcePool.Play(this, transform);
+            return Pools.AudioSourcePool.Play(this, transform);
+        }
+        public AudioSource PlayLooped(Transform transform = null)
+        {
+            return Pools.AudioSourcePool.PlayLooped(this, transform);
         }
     }
 }
