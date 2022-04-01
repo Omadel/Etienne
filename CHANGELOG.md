@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [2022.0.1] - 01/04/2022
+##Fixed
+- Audio Cue now send to right parameter
+
 ## [2022.0.0] - 24/03/2022
 ### Changed
 - version is now with year

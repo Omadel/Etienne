@@ -8,7 +8,7 @@ namespace Etienne
         /// <summary>
         /// Random sound from cue's clips
         /// </summary>
-        public Sound Sound => new Sound(_Clips[Random.Range(0, _Clips.Length)], _Parameters);
+        public Sound Sound => new Sound(_Clips[Random.Range(0, _Clips.Length)], Parameters);
         public AudioClip[] Clips => _Clips;
         public SoundParameters Parameters => _ParametersSO == null ? _Parameters : _ParametersSO;
 
@@ -16,8 +16,7 @@ namespace Etienne
         [Header("Parameters")]
         [SerializeField, Tooltip("Has priority over the self parameters")] private SoundParametersScriptableObject _ParametersSO;
         [SerializeField] private SoundParameters _Parameters;
-
-        public Cue(AudioClip[] clips = null)
+        public Cue(AudioClip[] clips=null )
         {
             _Clips = clips;
             _ParametersSO = null;
