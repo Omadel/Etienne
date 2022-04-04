@@ -10,19 +10,12 @@ namespace Etienne
         /// </summary>
         public Sound Sound => new Sound(_Clips[Random.Range(0, _Clips.Length)], Parameters);
         public AudioClip[] Clips => _Clips;
-        public SoundParameters Parameters => _Parameters ?? new SoundParameters();
+        public SoundParameters Parameters => _Parameters ?? new SoundParameters(null);
 
         [SerializeField] private AudioClip[] _Clips;
-        [Header("Parameters")]
         [SerializeField] private SoundParametersScriptableObject _Parameters;
 
-        public Cue()
-        {
-            _Clips = new AudioClip[0];
-            _Parameters = null;
-        }
-
-        public Cue(AudioClip[] clips)
+        public Cue(AudioClip[] clips = null)
         {
             _Clips = clips;
             _Parameters = null;

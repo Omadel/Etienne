@@ -32,9 +32,9 @@ namespace Etienne
         [SerializeField, Min(0)] private float minDistance;
         [SerializeField, Min(0)] private float maxDistance;
 
-        public SoundParameters()
+        public SoundParameters(AudioMixerGroup audioMixerGroup = null)
         {
-            audioMixerGroup = null;
+            this.audioMixerGroup = audioMixerGroup;
             priority = 128;
             volume = 1f;
             pitch = 1f;

@@ -8,22 +8,15 @@ namespace Etienne
         public SoundParameters Parameters => _Parameters ?? _ParametersStruct;
 
         [SerializeField] private AudioClip _Clip;
-        [Header("Parameters")]
         [SerializeField] private SoundParametersScriptableObject _Parameters;
+
         private SoundParameters _ParametersStruct;
 
-        public Sound()
-        {
-            _Clip = null;
-            _Parameters = null;
-            _ParametersStruct = new SoundParameters();
-        }
-
-        public Sound(AudioClip clip)
+        public Sound(AudioClip clip = null)
         {
             _Clip = clip;
             _Parameters = null;
-            _ParametersStruct = new SoundParameters();
+            _ParametersStruct = new SoundParameters(null);
         }
 
         public Sound(AudioClip clip, SoundParametersScriptableObject parameters)
