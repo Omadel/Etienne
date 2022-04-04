@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [2022.1.0] - 04/04/2022
+###Major Update
+- Can't update to this version withoud modify somethings
+##Fixed
+- Audio Parameters
+##Changed
+- GameFeedbacks are Now Async Methods
+##Removed 
+- Obsolete AudioManager
+
 ## [2022.0.2] - 04/04/2022
 ##Fixed
 - Audio Pool now is in dont destroy on load
