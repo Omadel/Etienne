@@ -9,6 +9,7 @@ Dates in European way
 ## [2022.0.2] - 04/04/2022
 ##Fixed
 - Audio Pool now is in dont destroy on load
+- Scene Loader now has an action when scenes are loaded
 
 ## [2022.0.1] - 01/04/2022
 ##Fixed

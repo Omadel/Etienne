@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 namespace Etienne {
     public class SceneLoader : Singleton<SceneLoader> {
+        public System.Action<int[]> OnSceneLoaded;
 
         [Header("Scene Loader")]
 #if TMP
@@ -140,6 +141,8 @@ namespace Etienne {
             camera.gameObject.SetActive(false);
 
             Time.timeScale = 1f;
+
+            OnSceneLoaded?.Invoke(loadIndexes);
         }
 
         public void ResetScenes() {
