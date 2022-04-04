@@ -8,6 +8,7 @@ namespace Etienne.Pools
         protected override void CreatePool(int maxSize, params object[] additionnalParameters)
         {
             _Parent = new GameObject(GetType().Name);
+            GameObject.DontDestroyOnLoad(_Parent);
             for(int i = 0; i < maxSize; i++)
             {
                 GameObject go = new GameObject(GetType().Name.Replace("Pool", ""));
@@ -23,6 +24,7 @@ namespace Etienne.Pools
             item.gameObject.SetActive(true);
             return item;
         }
+
         public override void Enqueue(T item)
         {
             if(item == null) return;

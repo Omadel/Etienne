@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [2022.0.2] - 04/04/2022
+##Fixed
+- Audio Pool now is in dont destroy on load
+
 ## [2022.0.1] - 01/04/2022
 ##Fixed
 - Audio Cue now send to right parameter
