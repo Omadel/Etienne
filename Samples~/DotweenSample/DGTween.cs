@@ -30,8 +30,6 @@ namespace Etienne.Feedback
                 component.DOKill();
             }
         }
-
-
         protected GameObject GetGameObject(GameObject gameObject)
         {
             GameObject go = gameObject;

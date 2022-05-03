@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [2022.2.0] 03/05/2022
+#Added
+- WebGL Support for game feedbacks (works for single threaded others too)
+Now use ExecuteCoroutine(GameObject) in a coroutine.
+#Rescoped
+- The execute is now protected, use ExecuteAsync(GameObject) Instead.
+
 ## [2022.1.0] - 04/04/2022
 ###Major Update
 - Can't update to this version withoud modify somethings

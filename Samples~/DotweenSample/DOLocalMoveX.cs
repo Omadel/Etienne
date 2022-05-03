@@ -1,5 +1,4 @@
 ﻿using DG.Tweening;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Etienne.Feedback
@@ -10,7 +9,7 @@ namespace Etienne.Feedback
         [Header("Parameters")]
         [SerializeField] private float _EndValue;
 
-        public override async Task Execute(GameObject gameObject)
+        protected override void Execute(GameObject gameObject)
         {
             GameObject go = GetGameObject(gameObject);
             float endValue = _EndValue;
@@ -19,9 +18,7 @@ namespace Etienne.Feedback
             if(ease == Ease.Unset) tween.SetEase(curveEase);
             else tween.SetEase(ease);
             tween.Play();
-            await Task.CompletedTask;
         }
-
 
         public override string ToString()
         {

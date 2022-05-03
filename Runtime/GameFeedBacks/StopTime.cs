@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -9,11 +10,22 @@ namespace Etienne.Feedback
     {
         [SerializeField] private float timer;
 
-        public override async Task Execute(GameObject gameObject)
+        protected override void Execute(GameObject gameObject)
+        {
+            Time.timeScale = 0;
+        }
+
+        public override async Task ExecuteAsync(GameObject gameObject)
         {
             float oldScale = Time.timeScale;
-            Time.timeScale = 0;
-            await Task.Delay((int)(timer * 1000));
+            await base.ExecuteAsync(gameObject);
+            Time.timeScale = oldScale;
+        }
+
+        public override IEnumerator ExecuteCoroutine(GameObject gameObject)
+        {
+            float oldScale = Time.timeScale;
+            yield return base.ExecuteCoroutine(gameObject);
             Time.timeScale = oldScale;
         }
 

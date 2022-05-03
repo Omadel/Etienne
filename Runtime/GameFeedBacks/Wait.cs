@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Etienne.Feedback
@@ -10,9 +11,16 @@ namespace Etienne.Feedback
         [SerializeField] private bool realtime;
         [SerializeField] private float timer;
 
-        public override async Task Execute(GameObject gameObject)
+        protected override void Execute(GameObject gameObject) { }
+
+        public override async Task ExecuteAsync(GameObject gameObject)
         {
             await Task.Delay((int)(timer * 1000 * (realtime ? 1 : Time.timeScale)));
+        }
+
+        public override IEnumerator ExecuteCoroutine(GameObject gameObject)
+        {
+            yield return new WaitForSeconds(timer);
         }
 
         public override string ToString()

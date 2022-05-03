@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Etienne.Feedback
@@ -11,10 +10,9 @@ namespace Etienne.Feedback
         [SerializeField] private bool _IsAttached;
         [SerializeField] private Cue _Cue = new Cue(null);
 
-        public override async Task Execute(GameObject gameObject)
+        protected override void Execute(GameObject gameObject)
         {
             _Cue.Play(_IsAttached ? gameObject.transform : null);
-            await Task.CompletedTask;
         }
 
         public override string ToString()

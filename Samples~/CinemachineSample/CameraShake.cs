@@ -1,5 +1,4 @@
 ﻿using Cinemachine;
-using System.Threading.Tasks;
 using UnityEngine;
 using static Cinemachine.CinemachineImpulseManager;
 
@@ -25,11 +24,10 @@ namespace Etienne.Feedback
         [SerializeField] private float _DissipationDistance = 1000;
         [SerializeField] private float _PropagationSpeed = 345;
 
-        public override async Task Execute(GameObject gameObject)
+        protected override void Execute(GameObject gameObject)
         {
             if(ImpulseSourcePool.Instance == null) ImpulseSourcePool.CreateInstance<ImpulseSourcePool>(100);
             ImpulseSourcePool.GenerateImpulse(GetImpulseDefinition(), _IsAttached ? gameObject.transform : null);
-            await Task.CompletedTask;
         }
 
         private CinemachineImpulseDefinition GetImpulseDefinition()

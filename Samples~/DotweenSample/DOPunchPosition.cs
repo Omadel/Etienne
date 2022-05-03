@@ -1,5 +1,4 @@
 ﻿using DG.Tweening;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Etienne.Feedback
@@ -17,15 +16,15 @@ namespace Etienne.Feedback
             "scale and the start scale")]
         private float _Elasticity = 1;
 
-        public override async Task Execute(GameObject gameObject)
+        protected override void Execute(GameObject gameObject)
         {
             GameObject go = GetGameObject(gameObject);
             Vector3 punch = _Punch;
             HandleOldTween(go.transform);
             Tween tween = go.transform.DOPunchPosition(punch, duration, _Vibrato, _Elasticity);
             tween.Play();
-            await Task.CompletedTask;
         }
+
         public override string ToString()
         {
             return $"Punch move to {_Punch}" + base.ToString();

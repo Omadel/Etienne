@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Etienne.Feedback
 {
@@ -11,12 +10,11 @@ namespace Etienne.Feedback
         [SerializeField] private bool isLocal = true, isChild;
         [SerializeField] private Vector3 position;
 
-        public override async Task Execute(GameObject gameObject)
+        protected override void Execute(GameObject gameObject)
         {
             if(prefab == null) return;
             Vector3 position = isLocal ? gameObject.transform.position + this.position : this.position;
             GameObject.Instantiate(prefab, position, Quaternion.identity, isChild ? gameObject.transform : null);
-            await Task.CompletedTask;
         }
 
         public override string ToString()
