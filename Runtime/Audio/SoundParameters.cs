@@ -43,5 +43,44 @@ namespace Etienne
             minDistance = 1;
             maxDistance = 500;
         }
+
+        public void SetAudioMixerGroup(AudioMixerGroup audioMixerGroup)
+        {
+            this.audioMixerGroup = audioMixerGroup;
+        }
+        public void SetPriority(int priority)
+        {
+            this.priority = priority;
+        }
+
+        public void SetVolume(float volume)
+        {
+            this.volume = volume;
+        }
+
+        public void SetPitch(float pitch)
+        {
+            this.pitch = pitch;
+        }
+
+        public void SetStereoPan(float stereoPan)
+        {
+            this.stereoPan = stereoPan;
+        }
+
+        public void SetSpacialBlend(int spacialBlend)
+        {
+            this.spacialBlend = spacialBlend;
+        }
+
+        public void SetMinDistance(float minDistance)
+        {
+            this.minDistance = minDistance;
+        }
+
+        public void SetMaxDistance(float maxDistance)
+        {
+            this.maxDistance = maxDistance;
+        }
     }
 }

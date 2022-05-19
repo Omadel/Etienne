@@ -9,6 +9,7 @@ Dates in European way
 ## [2022.2.1] 19/05/2022
 #Added
 - ExposedScriptableObject attribute
+- Settable Sound Parameters
 
 ## [2022.2.0] 03/05/2022
 #Added
