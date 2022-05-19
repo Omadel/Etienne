@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [2022.2.1] 19/05/2022
+#Added
+- ExposedScriptableObject attribute
+
 ## [2022.2.0] 03/05/2022
 #Added
 - WebGL Support for game feedbacks (works for single threaded others too)
