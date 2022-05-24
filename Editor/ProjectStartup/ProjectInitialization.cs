@@ -21,9 +21,10 @@ namespace EtienneEditor
             if(GUILayout.Button("Post Processing")) Packages.InstallUnityPackage("postprocessing");
             if(GUILayout.Button("Cinemachine")) Packages.InstallUnityPackage("cinemachine");
             EditorGUILayout.EndHorizontal();
+
+            PlayerSettings.colorSpace = (ColorSpace)EditorGUILayout.EnumPopup(new GUIContent("Color Space"), PlayerSettings.colorSpace);
+
             projectGenerationRootNamespace = EditorGUILayout.DelayedTextField(new GUIContent("Root namespace"), projectGenerationRootNamespace);
-
-
             EditorGUILayout.LabelField(new GUIContent("Enter Play Mode Settings"), EditorStyles.boldLabel);
             enterPlayModeOptionsEnabled = EditorGUILayout.Toggle(new GUIContent("Enter Play Mode Options", "Enables options when entering Play Mode"), enterPlayModeOptionsEnabled);
             EditorGUI.BeginDisabledGroup(!enterPlayModeOptionsEnabled);
