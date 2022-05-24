@@ -34,7 +34,7 @@ namespace EtienneEditor
             UnityEditor.PackageManager.PackageInfo info = (from packageInfo in packages
                                                            where packageInfo.name == packagename
                                                            select packageInfo).FirstOrDefault();
-            PrefsKeys.PackageCurrentVersion.SetValue(info != null ? info.version : "0.0.0");
+            PrefsKeys.PackageCurrentVersion = info != null ? info.version : "0.0.0";
             UnityEditor.EditorUtility.ClearProgressBar();
         }
 
@@ -57,12 +57,12 @@ namespace EtienneEditor
                 Debug.LogError(web.error);
                 web.Dispose();
                 UnityEditor.EditorUtility.ClearProgressBar();
-                PrefsKeys.PackageUrlVersion.SetValue("0.0.0");
+                PrefsKeys.PackageUrlVersion = "0.0.0";
             } else
             {
                 Package json = JsonUtility.FromJson<Package>(web.downloadHandler.text);
                 string version = json.version;
-                PrefsKeys.PackageUrlVersion.SetValue(version);
+                PrefsKeys.PackageUrlVersion = version;
             }
 
             web.Dispose();

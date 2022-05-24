@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [2022.2.2] 24/05/2022
+#Added
+- Project Initialization
+-- Import Base packages
+-- Import specific packages
+-- Import 2D Bundle packages
+- Boot Strapper
+
 ## [2022.2.1] 19/05/2022
 #Added
 - ExposedScriptableObject attribute

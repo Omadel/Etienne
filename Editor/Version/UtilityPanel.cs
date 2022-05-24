@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEngine;
+using static UnityEditor.EditorGUILayout;
 
 namespace EtienneEditor
 {
@@ -7,12 +8,6 @@ namespace EtienneEditor
     {
 
         private const string _WindowName = "Etienne Utility Panel";
-
-        private bool _UseDefaultLoader;
-        private bool _GoBackToCurrentScene;
-        private bool _SaveCurrentScene;
-        private int _DefaultSceneBuildIndex;
-        private string[] _BuildSceneNames;
 
         [MenuItem("Tools/Etienne/" + _WindowName, priority = -100)]
         private static void ShowWindow()
@@ -22,121 +17,57 @@ namespace EtienneEditor
             window.maxSize = window.minSize;
         }
 
-        private void UpdateFields()
-        {
-            _UseDefaultLoader = PrefsKeys.UseDefaultLoader;
-            _DefaultSceneBuildIndex = PrefsKeys.DefaultSceneBuildIndex;
-            _GoBackToCurrentScene = PrefsKeys.GoBackToCurrentScene;
-            _SaveCurrentScene = PrefsKeys.AutoSaveCurrentScene;
-
-            _BuildSceneNames = new string[EditorBuildSettings.scenes.Length];
-            for(int i = 0; i < _BuildSceneNames.Length; i++)
-            {
-                string name = System.IO.Path.GetFileNameWithoutExtension(EditorBuildSettings.scenes[i].path);
-                _BuildSceneNames[i] = name;
-            }
-            if(_DefaultSceneBuildIndex >= _BuildSceneNames.Length)
-            {
-                _DefaultSceneBuildIndex = 0;
-                PrefsKeys.DefaultSceneBuildIndex.SetValue(_DefaultSceneBuildIndex);
-            }
-        }
-        private void OnEnable()
-        {
-            UpdateFields();
-        }
-
-        private void OnFocus()
-        {
-            UpdateFields();
-        }
-
-        private void OnValidate()
-        {
-            UpdateFields();
-        }
-
         private void OnGUI()
         {
             DrawVersion();
+            DrawTabs();
 
-            EditorGUI.BeginChangeCheck();
-            _UseDefaultLoader = EditorGUILayout.BeginToggleGroup("Use default loader", _UseDefaultLoader);
-            if(EditorGUI.EndChangeCheck())
-            {
-                PrefsKeys.UseDefaultLoader.SetValue(_UseDefaultLoader);
-            }
-
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-
-            DrawScenesBox();
-            DrawSettings();
-
-            EditorGUILayout.EndVertical();
-
-            EditorGUILayout.EndToggleGroup();
         }
 
-        private void DrawSettings()
+        private int selectIndex = 0;
+        private string[] tabs = new string[] { "Project Initialization", "Default Loader", "Boot Strapper" };
+        private void DrawTabs()
         {
-            EditorGUI.BeginChangeCheck();
-            _SaveCurrentScene = EditorGUILayout.Toggle("Auto save current scene", _SaveCurrentScene);
-            if(EditorGUI.EndChangeCheck())
+            GUILayout.Space(10);
+            BeginHorizontal();
+            for(int i = 0; i < tabs.Length; i++)
             {
-                PrefsKeys.AutoSaveCurrentScene.SetValue(_SaveCurrentScene);
-            }
-
-            EditorGUI.BeginChangeCheck();
-            _GoBackToCurrentScene = EditorGUILayout.Toggle("Go back to current scene", _GoBackToCurrentScene);
-            if(EditorGUI.EndChangeCheck())
-            {
-                PrefsKeys.GoBackToCurrentScene.SetValue(_GoBackToCurrentScene);
-            }
-        }
-
-        private void DrawScenesBox()
-        {
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-
-            EditorGUILayout.LabelField("Default scene", EditorStyles.boldLabel);
-            for(int i = 0; i < _BuildSceneNames.Length; i++)
-            {
-                EditorGUILayout.BeginHorizontal();
-
-                Rect rect = EditorGUILayout.GetControlRect();
-
-                GUIStyle rightAlignedStyle = new GUIStyle(EditorStyles.label) { alignment = TextAnchor.MiddleRight, padding = new RectOffset(0, 5, 0, 0) };
-                EditorGUI.LabelField(rect, new GUIContent(i.ToString()), rightAlignedStyle);
-
-                EditorGUI.BeginChangeCheck();
-                EditorGUI.Toggle(rect, _BuildSceneNames[i], _DefaultSceneBuildIndex == i);
-                if(EditorGUI.EndChangeCheck())
+                EditorGUI.BeginDisabledGroup(i == selectIndex);
+                if(GUILayout.Button(tabs[i], GUILayout.Height(35)))
                 {
-                    _DefaultSceneBuildIndex = i;
-                    PrefsKeys.DefaultSceneBuildIndex.SetValue(_DefaultSceneBuildIndex);
+                    selectIndex = i;
+                    break;
                 }
-
-                EditorGUILayout.EndHorizontal();
+                EditorGUI.EndDisabledGroup();
             }
-
-            EditorGUILayout.EndVertical();
+            EndHorizontal();
+            switch(selectIndex)
+            {
+                case 0:
+                    ProjectInitialization.DrawGUI();
+                    break;
+                case 1:
+                    DefaultLoader.DrawGUI();
+                    break;
+                case 2:
+                    BootStrapper.DrawGUI();
+                    break;
+                default:
+                    break;
+            }
         }
 
         private static void DrawVersion()
         {
-            GUIStyle style = new GUIStyle(GUI.skin.label)
-            {
-                richText = true
-            };
+            GUIStyle style = new GUIStyle(GUI.skin.label) { richText = true };
 
-            EditorGUILayout.BeginHorizontal();
+            BeginHorizontal();
 
             string color = VersionChecker.IsUpToDate() ? EditorHexColor.Green : EditorHexColor.Red;
-            GUIContent label =
-                new GUIContent($"Current version: <color={color}> {PrefsKeys.PackageCurrentVersion.GetValue()} </color>, Newest version: {PrefsKeys.PackageUrlVersion.GetValue()}");
-            EditorGUILayout.LabelField(label, style);
+            GUIContent label = new GUIContent($"Current version: <color={color}> {PrefsKeys.PackageCurrentVersion} </color>, Newest version: {PrefsKeys.PackageUrlVersion}");
+            LabelField(label, style);
 
-            EditorGUILayout.EndHorizontal();
+            EndHorizontal();
 
             if(GUILayout.Button("Check Package")) VersionChecker.CheckVersion();
         }
