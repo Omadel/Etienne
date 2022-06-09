@@ -5,16 +5,50 @@ namespace EtienneEditor
     internal static class PrefsKeys
     {
 
-        internal static Prefint DefaultSceneBuildIndex => _DefaultSceneBuildIndex;
-        internal static Prefbool UseDefaultLoader => _UseDefaultLoader;
-        internal static Prefstring CurrentSceneName => _CurrentSceneName;
-        internal static Prefbool GoBackToCurrentScene => _GoBackToCurrentScene;
-        internal static Prefbool AutoSaveCurrentScene => _AutoSaveCurrentScene;
-        internal static Prefstring PackageCurrentVersion => _PackageCurrentVersion;
-        internal static Prefstring PackageUrlVersion => _PackageUrlVersion;
+        internal static int DefaultSceneBuildIndex
+        {
+            get => _DefaultSceneBuildIndex.GetValue();
+            set => _DefaultSceneBuildIndex.SetValue(value);
+        }
+        internal static bool UseDefaultLoader
+        {
+            get => _UseDefaultLoader.GetValue();
+            set => _UseDefaultLoader.SetValue(value);
+        }
+        internal static bool UseBootStrapper
+        {
+            get => _UseBootStrapper.GetValue();
+            set => _UseBootStrapper.SetValue(value);
+        }
+        internal static string CurrentSceneName
+        {
+            get => _CurrentSceneName.GetValue();
+            set => _CurrentSceneName.SetValue(value);
+        }
+        internal static bool GoBackToCurrentScene
+        {
+            get => _GoBackToCurrentScene.GetValue();
+            set => _GoBackToCurrentScene.SetValue(value);
+        }
+        internal static bool AutoSaveCurrentScene
+        {
+            get => _AutoSaveCurrentScene.GetValue();
+            set => _AutoSaveCurrentScene.SetValue(value);
+        }
+        internal static string PackageCurrentVersion
+        {
+            get => _PackageCurrentVersion.GetValue();
+            set => _PackageCurrentVersion.SetValue(value);
+        }
+        internal static string PackageUrlVersion
+        {
+            get => _PackageUrlVersion.GetValue();
+            set => _PackageUrlVersion.SetValue(value);
+        }
 
         private static Prefint _DefaultSceneBuildIndex = new Prefint("EtienneEditor.DefaultSceneBuildIndex");
         private static Prefbool _UseDefaultLoader = new Prefbool("EtienneEditor.UseDefaultLoader");
+        private static Prefbool _UseBootStrapper = new Prefbool("EtienneEditor.UseBootStrapper");
         private static Prefstring _CurrentSceneName = new Prefstring("EtienneEditor.CurrentSceneName");
         private static Prefbool _GoBackToCurrentScene = new Prefbool("EtienneEditor.GoBackToCurrentScene");
         private static Prefbool _AutoSaveCurrentScene = new Prefbool("EtienneEditor.SaveCurrentScene");
