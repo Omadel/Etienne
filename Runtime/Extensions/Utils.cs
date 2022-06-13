@@ -6,5 +6,9 @@ namespace Etienne
         {
             return (x - min) / (max - min); ;
         }
+        public static float Normalize(this int x, int min, int max)
+        {
+            return (x - (float)min) / (max - (float)min); ;
+        }
     }
 }
