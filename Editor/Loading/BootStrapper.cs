@@ -10,10 +10,11 @@ namespace EtienneEditor
         {
             if(!PrefsKeys.UseBootStrapper) return;
 
-            Object systems = Resources.Load("Systems");
+            Object systems = PrefsKeys.BootStrapperObjectID == 0 ? Resources.Load("Systems") :
+                EditorUtility.InstanceIDToObject(PrefsKeys.BootStrapperObjectID);
             if(!systems)
             {
-                Debug.LogWarning("There is no \"Systems\" named prefab in \"Assets/Resources\"" +
+                Debug.LogWarning("There is no \"Systems\" prefab named in \"Assets/Resources\"" +
                    System.Environment.NewLine +
                     "Consider either disableling this option in \"Etienne Utility Panel\" or create one");
                 return;
@@ -24,6 +25,9 @@ namespace EtienneEditor
         public static void DrawGUI()
         {
             PrefsKeys.UseBootStrapper = EditorGUILayout.Toggle(new GUIContent("Use Boot Strapper"), PrefsKeys.UseBootStrapper);
+            Object obj = PrefsKeys.BootStrapperObjectID == 0 ? Resources.Load("Systems") : EditorUtility.InstanceIDToObject(PrefsKeys.BootStrapperObjectID);
+            Object field = EditorGUILayout.ObjectField(new GUIContent("Systems"), obj, typeof(GameObject), false);
+            PrefsKeys.BootStrapperObjectID = field ? field.GetInstanceID() : 0;
         }
     }
 }

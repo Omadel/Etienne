@@ -2,7 +2,7 @@
 
 namespace EtienneEditor
 {
-    public sealed class EditorUtility
+    public sealed class EditorUtils
     {
         public static void ClearConsole()
         {

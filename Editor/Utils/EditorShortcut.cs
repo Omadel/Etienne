@@ -27,7 +27,7 @@ namespace EtienneEditor
         [MenuItem(MenuName + "Clear Console &c", false, MenuOrder)]
         private static void ClearConsole()
         {
-            EditorUtility.ClearConsole();
+            EditorUtils.ClearConsole();
         }
 
         [MenuItem(MenuName + "Toggle Inspector Lock &e", true, MenuOrder + 1)]

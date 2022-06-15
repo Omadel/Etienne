@@ -9,12 +9,16 @@ Dates in European way
 ## [2022.2.3] 15/06/2022
 #Added
 - Normalize ints
+#Fixed
+- Better BootStrapper
 #Optimize
 - Version Loading
 -- online
 -- local
 #Remove
 - Progressbars when loading
+#Renamed
+- EditorUtility to EditorUtils To avoid conflicts
 
 ## [2022.2.2] 24/05/2022
 #Added
