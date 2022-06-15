@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [2022.2.3] 15/06/2022
+#Added
+- Normalize ints
+#Optimize
+- Version Loading
+-- online
+-- local
+#Remove
+- Progressbars when loading
+
 ## [2022.2.2] 24/05/2022
 #Added
 - Project Initialization

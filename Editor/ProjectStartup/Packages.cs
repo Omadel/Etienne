@@ -37,6 +37,7 @@ namespace EtienneEditor
         public static void InstallUnityPackage(string packageName)
         {
             UnityEditor.PackageManager.Client.Add($"com.unity.{packageName}");
+            ForceResolve();
         }
 
         public static void ForceResolve()
