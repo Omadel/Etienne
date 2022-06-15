@@ -96,13 +96,11 @@ namespace EtienneEditor
                 if(int.Parse(cVer[i]) > int.Parse(urlVer[i])) return true;
             }
             return true;
-            /////
         }
 
         private static void UpdatePackage()
         {
             Client.Add(_Giturl);
-            Packages.ForceResolve();
         }
     }
 }
