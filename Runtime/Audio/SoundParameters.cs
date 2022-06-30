@@ -6,6 +6,21 @@ namespace Etienne
     [System.Serializable]
     public struct SoundParameters
     {
+
+        public static SoundParameters DefaultParameters
+        {
+            get
+            {
+                if (!initialized)
+                {
+                    defaultParameters = new SoundParameters(null);
+                    initialized = true;
+                }
+                return defaultParameters;
+            }
+        }
+        private static bool initialized = false;
+        private static SoundParameters defaultParameters;
         public AudioMixerGroup AudioMixerGroup => audioMixerGroup;
         public int Priority => priority;
         public float Volume => volume;
@@ -81,6 +96,11 @@ namespace Etienne
         public void SetMaxDistance(float maxDistance)
         {
             this.maxDistance = maxDistance;
+        }
+
+        public static bool IsValid(SoundParameters? parameters)
+        {
+            return !(parameters is null);
         }
     }
 }

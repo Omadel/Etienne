@@ -12,7 +12,7 @@ namespace Etienne.Pools
 
         public static void CreateInstance<Y>(int maxSize, params object[] additionnalParameters) where Y : Pool<T>, new()
         {
-            if(instance != null)
+            if (instance != null)
             {
                 Debug.LogError("There is another Pool existing");
                 return;
@@ -20,6 +20,10 @@ namespace Etienne.Pools
             instance = new Y();
             instance.queue = new Queue<T>();
             instance.CreatePool(maxSize, additionnalParameters);
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.playModeStateChanged -= instance.EditorDestroyInstance;
+            UnityEditor.EditorApplication.playModeStateChanged += instance.EditorDestroyInstance;
+#endif
         }
 
         protected Pool() { }
@@ -50,5 +54,13 @@ namespace Etienne.Pools
         {
             ResetInstance();
         }
+
+#if UNITY_EDITOR
+        private void EditorDestroyInstance(UnityEditor.PlayModeStateChange state)
+        {
+            if (state != UnityEditor.PlayModeStateChange.ExitingPlayMode) return;
+            ResetInstance();
+        }
+#endif
     }
 }

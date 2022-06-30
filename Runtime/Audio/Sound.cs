@@ -16,7 +16,7 @@ namespace Etienne
         {
             _Clip = clip;
             _Parameters = null;
-            _ParametersStruct = new SoundParameters(null);
+            _ParametersStruct = SoundParameters.DefaultParameters;
         }
 
         public Sound(AudioClip clip, SoundParametersScriptableObject parameters)
