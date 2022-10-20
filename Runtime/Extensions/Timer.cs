@@ -123,6 +123,7 @@ namespace Etienne
 			public void Add(Timer timer)
 			{
 				enabled = true;
+				if(timers.Contains(timer)) return;
 				timers.Add(timer);
 			}
 			
