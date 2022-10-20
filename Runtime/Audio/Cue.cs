@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Etienne
 {
@@ -54,6 +54,23 @@ namespace Etienne
             }
 
             return sound.Play(transform);
+        }
+
+	    public AudioSource Play(Vector3 position)
+        {
+            if(_Clips == null || _Clips.Length <= 0)
+            {
+                Debug.LogError("Cue is empty");
+                return null;
+            }
+            Sound sound = Sound;
+            if(sound.Clip == null)
+            {
+                Debug.LogError("Clip in cue is empty");
+                return null;
+            }
+
+            return sound.Play(position);
         }
     }
 }

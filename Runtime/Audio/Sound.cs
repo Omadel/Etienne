@@ -37,9 +37,20 @@ namespace Etienne
         {
             return Pools.AudioSourcePool.Play(this, transform);
         }
+
+	    public AudioSource Play(Vector3 position)
+        {
+	        return Pools.AudioSourcePool.Play(this, position);
+        }
+        
         public AudioSource PlayLooped(Transform transform = null)
         {
             return Pools.AudioSourcePool.PlayLooped(this, transform);
+        }
+        
+	    public AudioSource PlayLooped(Vector3 position)
+        {
+	        return Pools.AudioSourcePool.PlayLooped(this, position);
         }
     }
 }

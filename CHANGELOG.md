@@ -9,6 +9,7 @@ Dates in European way
 ## [2022.2.4] 20/10/2022
 #Added
 - Timers
+- Play sound at position
 #Fixed
 - Singleton reset on application quit (no more reloading the assemblies to reset static instances)
 
