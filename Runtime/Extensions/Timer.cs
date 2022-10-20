@@ -29,20 +29,24 @@ namespace Etienne
 			return timer;
 		}
 		
+		public float Duration => duration;
+		public float Time => time;
+		
 		event Action onComplete;
 		event Action<float> onUpdate;
 		
-		public float Duration;
-		public float time;
-		bool isComplete;
+		float duration;
+		float time;
+		bool isComplete, isPaused;
 		
 		private Timer(){}
 		
 		void Update()
 		{
-			time += Time.deltaTime;
+			if(isPaused) return;
+			time += UnityEngine.Time.deltaTime;
 			onUpdate?.Invoke(time);
-			if(time < Duration) return;
+			if(time < duration) return;
 			Complete();
 		}
 		
@@ -52,9 +56,24 @@ namespace Etienne
 			return this;
 		}
 		
+		public void Restart()
+		{
+			time = 0f;
+		}
+		
+		public void Pause()
+		{
+			isPaused = true;
+		}
+		
+		public void Play()
+		{
+			isPaused = false;
+		}
+		
 		public void SetDuration(float duration)
 		{
-			Duration = duration;
+			this.duration = duration;
 		}
 		
 		public Timer OnComplete(Action onComplete)
