@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [2022.2.4] 20/10/2022
+#Added
+- Timers
+#Fixed
+- Singleton reset on application quit (no more reloading the assemblies to reset static instances)
+
 ## [2022.2.3] 15/06/2022
 #Added
 - Normalize ints

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Etienne {
     public abstract class Singleton<T> : MonoBehaviour where T : class {
@@ -34,6 +34,11 @@ namespace Etienne {
             GameObject.Destroy(gameObject);
             ResetInstance();
         }
+        
+	    protected virtual void OnApplicationQuit()
+	    {
+	    	ResetInstance();
+	    }
 
         private static T instance;
     }
