@@ -59,6 +59,9 @@ namespace Etienne
 		public void Restart()
 		{
 			time = 0f;
+			Manager.Add(this);
+			isComplete = false;
+			isPaused = false;
 		}
 		
 		public void Pause()
