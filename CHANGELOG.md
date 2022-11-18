@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [2022.2.5] 18/18/2022
+#Fixed
+- Now support webGl Audio Pool
+
 ## [2022.2.4] 20/10/2022
 #Added
 - Timers

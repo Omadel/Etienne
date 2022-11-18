@@ -4,7 +4,7 @@ namespace Etienne.Pools
 {
     public class ComponentPool<T> : Pool<T> where T : Component
     {
-        private GameObject _Parent;
+        protected GameObject _Parent;
         protected override void CreatePool(int maxSize, params object[] additionnalParameters)
         {
             _Parent = new GameObject(GetType().Name);

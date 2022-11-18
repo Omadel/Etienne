@@ -3,7 +3,10 @@ namespace Etienne.Pools
 {
     public class AudioSourcePool : ComponentPool<AudioSource>
     {
-	    public static AudioSource Play(Cue cue, int index, Vector3 position)
+#if UNITY_WEBGL
+        static WebGLAudioRoutiner routiner;
+#endif
+        public static AudioSource Play(Cue cue, int index, Vector3 position)
         {
             if (index < 0 || index >= cue.Clips.Length)
             {
@@ -12,7 +15,7 @@ namespace Etienne.Pools
             }
             return new Sound(cue.Clips[index], cue.Parameters).Play(position);
         }
-        
+
         public static AudioSource Play(Cue cue, int index, Transform transform = null)
         {
             if (index < 0 || index >= cue.Clips.Length)
@@ -23,14 +26,14 @@ namespace Etienne.Pools
             return new Sound(cue.Clips[index], cue.Parameters).Play(transform);
         }
 
-	    public static AudioSource Play(Sound sound, Vector3 position)
+        public static AudioSource Play(Sound sound, Vector3 position)
         {
             if (instance == null) CreateInstance<AudioSourcePool>(100);
 
             AudioSource source = instance.Dequeue();
             source.SetSoundToSource(sound);
             source.Play();
-	        source.transform.position= position;
+            source.transform.position = position;
             EnqueueSoundAfterClip(source);
             return source;
         }
@@ -50,7 +53,13 @@ namespace Etienne.Pools
             EnqueueSoundAfterClip(source);
             return source;
         }
-
+#if UNITY_WEBGL
+        static void EnqueueSoundAfterClip(AudioSource source)
+        {
+            if (routiner == null) routiner = ((AudioSourcePool)instance)._Parent.AddComponent<WebGLAudioRoutiner>();
+            routiner.EnqueueSoundAfterClip(instance, source);
+        }
+#else
         private static async void EnqueueSoundAfterClip(AudioSource source)
         {
             await System.Threading.Tasks.Task.Delay((int)(source.clip.length * 1010));
@@ -58,8 +67,8 @@ namespace Etienne.Pools
 
             instance.Enqueue(source);
         }
-
-	    public static AudioSource PlayLooped(Sound sound, Vector3 position)
+#endif
+        public static AudioSource PlayLooped(Sound sound, Vector3 position)
         {
             if (instance == null) CreateInstance<AudioSourcePool>(100);
 
