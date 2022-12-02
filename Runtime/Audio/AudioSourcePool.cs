@@ -3,6 +3,9 @@ namespace Etienne.Pools
 {
     public class AudioSourcePool : ComponentPool<AudioSource>
     {
+        public static AudioSourcePool Instance => instance;
+
+        private static AudioSourcePool instance;
 #if UNITY_WEBGL
         static WebGLAudioRoutiner routiner;
 #endif
@@ -28,7 +31,7 @@ namespace Etienne.Pools
 
         public static AudioSource Play(Sound sound, Vector3 position)
         {
-            if (instance == null) CreateInstance<AudioSourcePool>(100);
+            if (instance == null) instance = CreateInstance<AudioSourcePool>(100);
 
             AudioSource source = instance.Dequeue();
             source.SetSoundToSource(sound);
@@ -40,7 +43,7 @@ namespace Etienne.Pools
 
         public static AudioSource Play(Sound sound, Transform transform = null)
         {
-            if (instance == null) CreateInstance<AudioSourcePool>(100);
+            if (instance == null) instance = CreateInstance<AudioSourcePool>(100);
 
             AudioSource source = instance.Dequeue();
             source.SetSoundToSource(sound);
@@ -70,7 +73,7 @@ namespace Etienne.Pools
 #endif
         public static AudioSource PlayLooped(Sound sound, Vector3 position)
         {
-            if (instance == null) CreateInstance<AudioSourcePool>(100);
+            if (instance == null) instance = CreateInstance<AudioSourcePool>(100);
 
             AudioSource source = instance.Dequeue();
             source.SetSoundToSource(sound);
@@ -82,7 +85,7 @@ namespace Etienne.Pools
 
         public static AudioSource PlayLooped(Sound sound, Transform transform = null)
         {
-            if (instance == null) CreateInstance<AudioSourcePool>(100);
+            if (instance == null) instance = CreateInstance<AudioSourcePool>(100);
 
             AudioSource source = instance.Dequeue();
             source.SetSoundToSource(sound);

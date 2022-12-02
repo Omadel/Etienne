@@ -6,7 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
-## [2022.2.5] 18/18/2022
+## [2022.3.0] 02/12/2022
+#Changed
+- Pools no longer are singletons
+
+## [2022.2.5] 18/11/2022
 #Fixed
 - Now support webGl Audio Pool
 
