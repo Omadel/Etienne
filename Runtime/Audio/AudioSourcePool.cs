@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+
 namespace Etienne.Pools
 {
     public class AudioSourcePool : ComponentPool<AudioSource>
@@ -9,6 +11,24 @@ namespace Etienne.Pools
 #if UNITY_WEBGL
         static WebGLAudioRoutiner routiner;
 #endif
+
+        protected override void CreatePool(int maxSize, params object[] additionnalParameters)
+        {
+            base.CreatePool(maxSize, additionnalParameters);
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.playModeStateChanged -= EditorDestroyInstance;
+            UnityEditor.EditorApplication.playModeStateChanged += EditorDestroyInstance;
+#endif
+        }
+
+#if UNITY_EDITOR
+        private void EditorDestroyInstance(UnityEditor.PlayModeStateChange state)
+        {
+            if (state != UnityEditor.PlayModeStateChange.ExitingPlayMode) return;
+            instance = null;
+        }
+#endif
+
         public static AudioSource Play(Cue cue, int index, Vector3 position)
         {
             if (index < 0 || index >= cue.Clips.Length)
