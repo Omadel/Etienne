@@ -113,7 +113,7 @@ namespace Etienne
         public void Kill()
         {
             isPlaying = false;
-            if (enQueueWhenCompleted) Manager.Remove(this);
+            Manager.Remove(this, enQueueWhenCompleted);
         }
 
         private void OnApplicationQuit()
@@ -144,10 +144,10 @@ namespace Etienne
                 timers.Add(timer);
             }
 
-            public void Remove(Timer timer)
+            public void Remove(Timer timer, bool enQueueWhenCompleted)
             {
                 timers.Remove(timer);
-                timerQueue.Enqueue(timer);
+                if (!enQueueWhenCompleted) timerQueue.Enqueue(timer);
                 if (timers.Count <= 0) enabled = false;
             }
 
