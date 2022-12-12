@@ -105,9 +105,9 @@ namespace Etienne
                 Debug.LogWarning("Timer is already completed");
                 return;
             }
-            onComplete?.Invoke();
             isComplete = true;
             Kill();
+            onComplete?.Invoke();
         }
 
         public void Kill()
