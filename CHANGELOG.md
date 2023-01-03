@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [2023.0.0] 03/01/2023
+#Changed
+- Component Pools Can Now be created from a prefab
+
 ## [2022.3.0] 02/12/2022
 #Changed
 - Pools no longer are singletons
