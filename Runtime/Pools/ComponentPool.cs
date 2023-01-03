@@ -15,7 +15,7 @@ namespace Etienne.Pools
             _Parent = new GameObject(poolName);
             if (additionnalParameters.Length >= 1) _Parent.hideFlags = (HideFlags)additionnalParameters[0];
             if (additionnalParameters.Length >= 2) _Prefab = (T)additionnalParameters[1];
-            GameObject.DontDestroyOnLoad(_Parent);
+            if (additionnalParameters.Length >= 3 && (bool)additionnalParameters[2]) GameObject.DontDestroyOnLoad(_Parent);
             string itemName = poolName.Replace("Pool", "");
             for (int i = 0; i < maxSize; i++)
             {
@@ -42,10 +42,10 @@ namespace Etienne.Pools
         /// <param name="prefab">The desired prefab to instantiate.</param>
         /// <param name="hideFlags">Optionnal, the pool's HideFlags to avoid bloat.</param>
         /// <returns>The created pool</returns>
-        public ComponentPool(int size, T prefab, HideFlags hideFlags = HideFlags.None)
+        public ComponentPool(int size, T prefab, HideFlags hideFlags = HideFlags.None, bool dontDestroyOnLoad = true)
         {
             queue = new Queue<T>(size);
-            CreatePool(size, hideFlags, prefab);
+            CreatePool(size, hideFlags, prefab, dontDestroyOnLoad);
         }
 
         public override T Dequeue()
