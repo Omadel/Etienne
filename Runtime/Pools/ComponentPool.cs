@@ -8,6 +8,9 @@ namespace Etienne.Pools
     {
         internal ComponentPoolInspector inspector;
         private T prefab;
+        private int maxSize;
+        private string itemsName;
+        private HideFlags hideFlags;
 
         protected ComponentPool() { }
         /// <summary>
@@ -25,16 +28,31 @@ namespace Etienne.Pools
 
         public override T Dequeue()
         {
-            T item = queue.Dequeue();
+            if (!queue.TryDequeue(out T item))
+            {
+                Debug.LogWarning($"Trying to dequeue <b>{inspector.gameObject.name}</b>'s empty queue. Inscreasing max size from <b>{maxSize}</b> to <b>{maxSize * 2}</b>." +
+                    System.Environment.NewLine +
+                    $"This may cause performance issues, if this warning happens often try manually increasing the pool's max size.", inspector);
+                EnqueueNewItems(maxSize, maxSize * 2);
+                item = queue.Dequeue();
+            }
+            item.gameObject.hideFlags = HideFlags.None;
             item.gameObject.SetActive(true);
             inspector.QueueCount--;
             return item;
         }
 
-        public T Dequeue(float enqueueDelay)
+        public T Dequeue(float delay)
         {
             T item = Dequeue();
-            inspector.EnqueueAfterDelay(this, item, enqueueDelay);
+            DelayedEnqueue(item, delay);
+            inspector.EnqueueAfterDelay(this, item, delay);
+            return item;
+        }
+
+        public T DelayedEnqueue(T item, float delay)
+        {
+            inspector.EnqueueAfterDelay(this, item, delay);
             return item;
         }
 
@@ -43,13 +61,15 @@ namespace Etienne.Pools
             if (item == null) return;
             item.transform.parent = inspector.transform;
             item.gameObject.SetActive(false);
+            item.gameObject.hideFlags = hideFlags;
             queue.Enqueue(item);
             inspector.QueueCount++;
         }
 
         protected override void CreatePool(int maxSize, params object[] additionnalParameters)
         {
-            string poolName = new Regex(@".[^`]$").Replace(GetType().Name, " ");
+            this.maxSize = maxSize;
+            string poolName = new Regex(@"[`].").Replace(GetType().Name, " ");
 
             if (additionnalParameters.Length >= 1)
             {
@@ -57,8 +77,9 @@ namespace Etienne.Pools
                 poolName += paramName == "" ? typeof(T).Name : paramName;
             }
             inspector = new GameObject(poolName).AddComponent<ComponentPoolInspector>();
-            HideFlags paramHideFlags = HideFlags.None;
-            if (additionnalParameters.Length >= 2) paramHideFlags = (HideFlags)additionnalParameters[1];
+            inspector.MaxSize = this.maxSize;
+
+            if (additionnalParameters.Length >= 2) hideFlags = (HideFlags)additionnalParameters[1];
             if (additionnalParameters.Length >= 3)
             {
                 prefab = (T)additionnalParameters[2];
@@ -66,27 +87,36 @@ namespace Etienne.Pools
             }
             if (additionnalParameters.Length >= 4 && (bool)additionnalParameters[3]) GameObject.DontDestroyOnLoad(inspector.gameObject);
 
-            string itemName = poolName.Replace("Pool", "");
-            for (int i = 0; i < maxSize; i++)
+            itemsName = poolName.Replace("Pool", "");
+            EnqueueNewItems(0, maxSize);
+        }
+
+        private void EnqueueNewItems(int oldMaxSize, int maxSize)
+        {
+            this.maxSize = maxSize;
+            inspector.MaxSize = maxSize;
+            for (int i = oldMaxSize; i < maxSize; i++) EnqueueNewItem(i);
+        }
+
+        private void EnqueueNewItem(int index)
+        {
+            if (prefab == null)
             {
-                if (prefab == null)
-                {
-                    GameObject go = new GameObject($"{itemName} {i + 1:000}") { hideFlags = paramHideFlags };
-                    Enqueue(go.AddComponent<T>());
-                }
-                else
-                {
-                    T instance = GameObject.Instantiate(prefab, inspector.transform);
-                    instance.gameObject.name = $"{itemName} {i + 1:000}";
-                    instance.gameObject.hideFlags = paramHideFlags;
-                    Enqueue(instance);
-                }
+                GameObject go = new GameObject($"{itemsName} {index + 1:000}") { hideFlags = this.hideFlags };
+                Enqueue(go.AddComponent<T>());
             }
-            inspector.QueueCount = maxSize;
+            else
+            {
+                T instance = GameObject.Instantiate(prefab, inspector.transform);
+                instance.gameObject.name = $"{itemsName} {index + 1:000}";
+                instance.gameObject.hideFlags = this.hideFlags;
+                Enqueue(instance);
+            }
         }
     }
     internal class ComponentPoolInspector : MonoBehaviour
     {
+        [ReadOnly] public int MaxSize;
         [ReadOnly] public int QueueCount;
         [ReadOnly] public Component Prefab;
 
@@ -102,7 +132,7 @@ namespace Etienne.Pools
         internal async void EnqueueAfterDelay<T>(ComponentPool<T> pool, T item, float delay) where T : Component
         {
             await System.Threading.Tasks.Task.Delay(Mathf.RoundToInt(delay * 1000));
-            pool.Enqueue(item);
+            pool?.Enqueue(item);
         }
 #endif
     }

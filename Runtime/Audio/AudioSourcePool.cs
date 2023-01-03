@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Etienne.Pools
 {
@@ -15,6 +14,8 @@ namespace Etienne.Pools
         protected override void CreatePool(int maxSize, params object[] additionnalParameters)
         {
             base.CreatePool(maxSize, additionnalParameters);
+            if (instance != null) return;
+            instance = this;
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.playModeStateChanged -= EditorDestroyInstance;
             UnityEditor.EditorApplication.playModeStateChanged += EditorDestroyInstance;
@@ -49,68 +50,47 @@ namespace Etienne.Pools
             return new Sound(cue.Clips[index], cue.Parameters).Play(transform);
         }
 
-        public static AudioSource Play(Sound sound, Vector3 position)
+        public static AudioSource Play(Sound sound)
         {
             if (instance == null) instance = CreateInstance<AudioSourcePool>(100);
 
             AudioSource source = instance.Dequeue();
             source.SetSoundToSource(sound);
             source.Play();
+            instance.DelayedEnqueue(source, source.clip.length * 1.1f);
+            return source;
+        }
+
+        public static AudioSource Play(Sound sound, Vector3 position)
+        {
+            AudioSource source = Play(sound);
             source.transform.position = position;
-            EnqueueSoundAfterClip(source);
             return source;
         }
 
         public static AudioSource Play(Sound sound, Transform transform = null)
         {
-            if (instance == null) instance = CreateInstance<AudioSourcePool>(100);
-
-            AudioSource source = instance.Dequeue();
-            source.SetSoundToSource(sound);
-            source.Play();
+            AudioSource source = Play(sound);
             if (transform != null)
             {
                 source.transform.parent = transform;
                 source.transform.localPosition = Vector3.zero;
             }
-            EnqueueSoundAfterClip(source);
             return source;
         }
-#if UNITY_WEBGL
-        static void EnqueueSoundAfterClip(AudioSource source)
-        {
-            if (routiner == null) routiner = ((AudioSourcePool)instance)._Inspector.gameObject.AddComponent<WebGLAudioRoutiner>();
-            routiner.EnqueueSoundAfterClip(instance, source);
-        }
-#else
-        private static async void EnqueueSoundAfterClip(AudioSource source)
-        {
-            await System.Threading.Tasks.Task.Delay((int)(source.clip.length * 1010));
-            if (!Application.isPlaying || source == null) return;
 
-            instance.Enqueue(source);
-        }
-#endif
         public static AudioSource PlayLooped(Sound sound, Vector3 position)
         {
-            if (instance == null) instance = CreateInstance<AudioSourcePool>(100);
-
-            AudioSource source = instance.Dequeue();
-            source.SetSoundToSource(sound);
+            AudioSource source = Play(sound);
             source.loop = true;
-            source.Play();
             source.transform.position = position;
             return source;
         }
 
         public static AudioSource PlayLooped(Sound sound, Transform transform = null)
         {
-            if (instance == null) instance = CreateInstance<AudioSourcePool>(100);
-
-            AudioSource source = instance.Dequeue();
-            source.SetSoundToSource(sound);
+            AudioSource source = Play(sound);
             source.loop = true;
-            source.Play();
             if (transform != null)
             {
                 source.transform.parent = transform;
