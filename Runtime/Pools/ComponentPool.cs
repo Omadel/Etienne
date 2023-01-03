@@ -34,7 +34,7 @@ namespace Etienne.Pools
             }
         }
 
-        private ComponentPool() { }
+        protected ComponentPool() { }
         /// <summary>
         /// Create a pool with a prefab as a reference.
         /// </summary>
