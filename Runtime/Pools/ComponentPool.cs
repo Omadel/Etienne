@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace Etienne.Pools
     {
         protected GameObject _Parent;
         private T _Prefab;
+
         protected override void CreatePool(int maxSize, params object[] additionnalParameters)
         {
             string poolName = new Regex(@".[^`]$").Replace(GetType().Name, " ") + typeof(T).Name;
@@ -31,6 +33,8 @@ namespace Etienne.Pools
                 }
             }
         }
+
+        private ComponentPool() { }
         /// <summary>
         /// Create a pool with a prefab as a reference.
         /// </summary>
@@ -38,11 +42,10 @@ namespace Etienne.Pools
         /// <param name="prefab">The desired prefab to instantiate.</param>
         /// <param name="hideFlags">Optionnal, the pool's HideFlags to avoid bloat.</param>
         /// <returns>The created pool</returns>
-        public static ComponentPool<T> CreatePoolFromPrefab(int size, T prefab, HideFlags hideFlags = HideFlags.None)
+        public ComponentPool(int size, T prefab, HideFlags hideFlags = HideFlags.None)
         {
-            ComponentPool<T> pool = new ComponentPool<T>() { queue = new System.Collections.Generic.Queue<T>(size) };
-            pool.CreatePool(size, hideFlags, prefab);
-            return pool;
+            queue = new Queue<T>(size);
+            CreatePool(size, hideFlags, prefab);
         }
 
         public override T Dequeue()
