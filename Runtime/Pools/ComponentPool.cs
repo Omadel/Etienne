@@ -58,7 +58,7 @@ namespace Etienne.Pools
 
         public override void Enqueue(T item)
         {
-            if (item == null) return;
+            if (item == null || queue.Contains(item)) return;
             item.transform.parent = inspector.transform;
             item.gameObject.SetActive(false);
             item.gameObject.hideFlags = hideFlags;
