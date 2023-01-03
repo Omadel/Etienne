@@ -5,11 +5,7 @@ namespace Etienne.Pools
     public class AudioSourcePool : ComponentPool<AudioSource>
     {
         public static AudioSourcePool Instance => instance;
-
         private static AudioSourcePool instance;
-#if UNITY_WEBGL
-        static WebGLAudioRoutiner routiner;
-#endif
 
         protected override void CreatePool(int maxSize, params object[] additionnalParameters)
         {
