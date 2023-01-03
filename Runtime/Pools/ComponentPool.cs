@@ -6,8 +6,8 @@ namespace Etienne.Pools
 {
     public class ComponentPool<T> : Pool<T> where T : Component
     {
-        protected GameObject _Parent;
-        private T _Prefab;
+        internal ComponentPoolInspector inspector;
+        private T prefab;
 
         protected ComponentPool() { }
         /// <summary>
@@ -27,15 +27,24 @@ namespace Etienne.Pools
         {
             T item = queue.Dequeue();
             item.gameObject.SetActive(true);
+            inspector.QueueCount--;
+            return item;
+        }
+
+        public T Dequeue(float enqueueDelay)
+        {
+            T item = Dequeue();
+            inspector.EnqueueAfterDelay(this, item, enqueueDelay);
             return item;
         }
 
         public override void Enqueue(T item)
         {
             if (item == null) return;
-            item.transform.parent = _Parent.transform;
+            item.transform.parent = inspector.transform;
             item.gameObject.SetActive(false);
             queue.Enqueue(item);
+            inspector.QueueCount++;
         }
 
         protected override void CreatePool(int maxSize, params object[] additionnalParameters)
@@ -47,27 +56,55 @@ namespace Etienne.Pools
                 string paramName = (string)additionnalParameters[0];
                 poolName += paramName == "" ? typeof(T).Name : paramName;
             }
-            _Parent = new GameObject(poolName);
-            if (additionnalParameters.Length >= 2) _Parent.hideFlags = (HideFlags)additionnalParameters[1];
-            if (additionnalParameters.Length >= 3) _Prefab = (T)additionnalParameters[2];
-            if (additionnalParameters.Length >= 4 && (bool)additionnalParameters[3]) GameObject.DontDestroyOnLoad(_Parent);
+            inspector = new GameObject(poolName).AddComponent<ComponentPoolInspector>();
+            HideFlags paramHideFlags = HideFlags.None;
+            if (additionnalParameters.Length >= 2) paramHideFlags = (HideFlags)additionnalParameters[1];
+            if (additionnalParameters.Length >= 3)
+            {
+                prefab = (T)additionnalParameters[2];
+                inspector.Prefab = prefab;
+            }
+            if (additionnalParameters.Length >= 4 && (bool)additionnalParameters[3]) GameObject.DontDestroyOnLoad(inspector.gameObject);
 
             string itemName = poolName.Replace("Pool", "");
             for (int i = 0; i < maxSize; i++)
             {
-                if (_Prefab == null)
+                if (prefab == null)
                 {
-                    GameObject go = new GameObject($"{itemName} {i + 1:000}") { hideFlags = _Parent.hideFlags };
+                    GameObject go = new GameObject($"{itemName} {i + 1:000}") { hideFlags = paramHideFlags };
                     Enqueue(go.AddComponent<T>());
                 }
                 else
                 {
-                    T instance = GameObject.Instantiate(_Prefab, _Parent.transform);
+                    T instance = GameObject.Instantiate(prefab, inspector.transform);
                     instance.gameObject.name = $"{itemName} {i + 1:000}";
-                    instance.gameObject.hideFlags = _Parent.hideFlags;
+                    instance.gameObject.hideFlags = paramHideFlags;
                     Enqueue(instance);
                 }
             }
+            inspector.QueueCount = maxSize;
         }
     }
+    internal class ComponentPoolInspector : MonoBehaviour
+    {
+        [ReadOnly] public int QueueCount;
+        [ReadOnly] public Component Prefab;
+
+#if UNITY_WEBGL
+        internal void EnqueueAfterDelay<T>(ComponentPool<T> pool, T item, float delay) where T : Component => StartCoroutine(EnqueueDelayRoutine(pool, item, delay));
+
+        private IEnumerator EnqueueDelayRoutine<T>(ComponentPool<T> pool, T item, float delay) where T : Component
+        {
+            yield return new WaitForSeconds(delay);
+            pool.Enqueue(item);
+        }
+#else
+        internal async void EnqueueAfterDelay<T>(ComponentPool<T> pool, T item, float delay) where T : Component
+        {
+            await System.Threading.Tasks.Task.Delay(Mathf.RoundToInt(delay * 1000));
+            pool.Enqueue(item);
+        }
+#endif
+    }
+
 }

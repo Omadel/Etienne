@@ -79,7 +79,7 @@ namespace Etienne.Pools
 #if UNITY_WEBGL
         static void EnqueueSoundAfterClip(AudioSource source)
         {
-            if (routiner == null) routiner = ((AudioSourcePool)instance)._Parent.AddComponent<WebGLAudioRoutiner>();
+            if (routiner == null) routiner = ((AudioSourcePool)instance)._Inspector.gameObject.AddComponent<WebGLAudioRoutiner>();
             routiner.EnqueueSoundAfterClip(instance, source);
         }
 #else
