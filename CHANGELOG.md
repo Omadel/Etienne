@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Dates in European way
 
 ## [2023.0.0] 03/01/2023
+#Added
+- Dequeued items can now be enqueued back with a delay
 #Changed
 - Component Pools Can Now be created from a prefab
 
