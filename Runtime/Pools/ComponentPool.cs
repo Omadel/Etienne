@@ -28,8 +28,7 @@ namespace Etienne.Pools
 
         public override T Dequeue()
         {
-            T item = queue.Dequeue();
-            if (item == null)
+            if (!queue.TryDequeue(out T item))
             {
                 Debug.LogWarning($"Trying to dequeue <b>{inspector.gameObject.name}</b>'s empty queue. Inscreasing max size from <b>{maxSize}</b> to <b>{maxSize * 2}</b>." +
                     System.Environment.NewLine +
