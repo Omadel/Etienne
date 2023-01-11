@@ -3,7 +3,7 @@
   "displayName": "Etienne",
   "version": "2023.0.0",
   "description": "Etienne's Plugins.",
-  "unity": "2020.3",
+  "unity": "2021.3",
   "author": "Etienne Javelle",
   "enableLockFile": true,
   "resolutionStrategy": "highest",
