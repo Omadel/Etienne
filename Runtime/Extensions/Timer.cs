@@ -133,7 +133,8 @@ namespace Etienne
 
             public Timer GetTimer()
             {
-                if (timerQueue.TryDequeue(out Timer timer)) return timer;
+                Timer timer = timerQueue.Dequeue();
+                if (timer != null) return timer;
                 return new Timer();
             }
 
