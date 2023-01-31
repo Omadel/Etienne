@@ -70,10 +70,12 @@ namespace EtienneEditor {
         }
 
         private void DrawPath() {
+            Handles.color = Color.white;
             Handles.DrawAAPolyLine(Target.WorldWaypoints);
         }
 
         private void DrawPositionControl(int i, Matrix4x4 localToWorld, Quaternion localRotation) {
+            Handles.color = Color.white;
             Vector3 waypoint = Target.LocalWaypoints[i];
             EditorGUI.BeginChangeCheck();
             Vector3 pos = localToWorld.MultiplyPoint(waypoint);
