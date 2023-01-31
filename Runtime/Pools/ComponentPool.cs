@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
@@ -6,7 +7,7 @@ namespace Etienne.Pools
 {
     public class ComponentPool<T> : Pool<T> where T : Component
     {
-        internal ComponentPoolInspector inspector;
+        protected ComponentPoolInspector inspector;
         private T prefab;
         private int maxSize;
         private string itemsName;
@@ -102,23 +103,24 @@ namespace Etienne.Pools
         {
             if (prefab == null)
             {
-                GameObject go = new GameObject($"{itemsName} {index + 1:000}") { hideFlags = this.hideFlags };
+                GameObject go = new GameObject($"{itemsName} {index + 1:000}") { hideFlags = hideFlags };
                 Enqueue(go.AddComponent<T>());
             }
             else
             {
                 T instance = GameObject.Instantiate(prefab, inspector.transform);
                 instance.gameObject.name = $"{itemsName} {index + 1:000}";
-                instance.gameObject.hideFlags = this.hideFlags;
+                instance.gameObject.hideFlags = hideFlags;
                 Enqueue(instance);
             }
         }
     }
-    internal class ComponentPoolInspector : MonoBehaviour
+    public class ComponentPoolInspector : MonoBehaviour
     {
         [ReadOnly] public int MaxSize;
         [ReadOnly] public int QueueCount;
         [ReadOnly] public Component Prefab;
+        private Action onDestroy;
 
 #if UNITY_WEBGL
         internal void EnqueueAfterDelay<T>(ComponentPool<T> pool, T item, float delay) where T : Component => StartCoroutine(EnqueueDelayRoutine(pool, item, delay));
@@ -135,6 +137,15 @@ namespace Etienne.Pools
             pool?.Enqueue(item);
         }
 #endif
+        public void SetOnDestroy(Action onDestroy)
+        {
+            this.onDestroy += onDestroy;
+        }
+
+        private void OnDestroy()
+        {
+            onDestroy?.Invoke();
+        }
     }
 
 }

@@ -48,7 +48,11 @@ namespace Etienne.Pools
 
         public static AudioSource Play(Sound sound)
         {
-            if (instance == null) instance = CreateInstance<AudioSourcePool>(100);
+            if (instance == null)
+            {
+                instance = CreateInstance<AudioSourcePool>(100);
+                instance.inspector.SetOnDestroy(() => instance = null);
+            }
 
             AudioSource source = instance.Dequeue();
             source.SetSoundToSource(sound);
@@ -94,6 +98,5 @@ namespace Etienne.Pools
             }
             return source;
         }
-
     }
 }
