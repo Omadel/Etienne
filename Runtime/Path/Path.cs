@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Etienne {
     public class Path : MonoBehaviour {
+        public int WaypointCount => LocalWaypoints.Length;
         public Vector3[] WorldWaypoints {
             get {
                 Vector3[] path = LocalWaypoints.Clone() as Vector3[];

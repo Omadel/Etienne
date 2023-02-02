@@ -9,39 +9,62 @@ namespace EtienneEditor
     [CustomEditor(typeof(NavPath))]
     public class NavPathEditor : Editor<NavPath>
     {
-        private Path[] paths;
         private List<PathIndex> selectedPathIndexes = new List<PathIndex>();
+
+        private PathIndex debugFound;
+        private PathIndex debugTargetFound;
+        private Vector3 debugPosition = new Vector3(-3, 0, 0);
+        private Vector3 debugTargetPosition = new Vector3(3, 0, 0);
+        private List<Vector3> debugPath;
 
         private void OnEnable()
         {
-            paths = Target.GetComponentsInChildren<Path>();
+            DebugFindPath();
         }
+
+        private void DebugFindPath()
+        {
+            DebugFindTarget();
+            DebugFindStart();
+
+            DebugFindPathPositions();
+
+            ForceSceneUpdate();
+        }
+
+        private void DebugFindPathPositions()
+        {
+            debugPath = new List<Vector3>() { debugFound.GetPoint() };
+            if (debugFound.path == debugTargetFound.path)
+            {
+                debugPath.AddRange(Target.GetPathToPointInSamePath(debugFound, debugTargetFound));
+                return;
+            }
+
+            Intersection[] connectedIntersections = Target.GetPathIntersections(debugFound.path);
+            Intersection intersection = Target.GetNextIntersection(connectedIntersections,debugFound, debugTargetFound, out PathIndex pathIndex);
+            debugPath.AddRange(Target.GetPathToClosestIntersection(debugFound, intersection));
+            debugPath.Add(pathIndex.GetPoint());
+
+            if (intersection.IsConnectedToPath(debugTargetFound.path, out _))
+            {
+                debugPath.AddRange(Target.GetPathToPointInSamePath(pathIndex, debugTargetFound));
+            }
+        }
+
+        private void DebugFindStart() => debugFound = Target.FindClosestWaypoint(debugPosition);
+        private void DebugFindTarget() => debugTargetFound = Target.FindClosestWaypoint(debugTargetPosition);
 
         public override void OnInspectorGUI()
         {
-            if (GUILayout.Button("Create Intersection"))
-            {
-                CreateIntersection(selectedPathIndexes);
-            }
-            Vector3 old = debugTargetPosition;
-            debugTargetPosition = EditorGUILayout.Vector3Field("DebugPosition", debugTargetPosition);
-            if (old != debugTargetPosition)
-            {
-                ForceSceneUpdate();
-            }
+            if (GUILayout.Button("Create Intersection")) { CreateIntersection(selectedPathIndexes); }
 
-            old = debugPosition;
-            debugPosition = EditorGUILayout.Vector3Field("DebugPosition", debugPosition);
-            if (old != debugPosition)
-            {
-                DebugFindClosestPoint(debugPosition, debugTargetPosition);
-                ForceSceneUpdate();
-            }
-            if (GUILayout.Button("Find Closest point"))
-            {
-                DebugFindClosestPoint(debugPosition, debugTargetPosition);
-                ForceSceneUpdate();
-            }
+
+            Vector3 targetold = debugTargetPosition;
+            debugTargetPosition = EditorGUILayout.Vector3Field(nameof(debugTargetPosition), debugTargetPosition);
+            Vector3 old = debugPosition;
+            debugPosition = EditorGUILayout.Vector3Field(nameof(debugPosition), debugPosition);
+            if (targetold != debugTargetPosition || old != debugPosition) DebugFindPath();
 
             base.OnInspectorGUI();
         }
@@ -50,7 +73,10 @@ namespace EtienneEditor
         private void CreateIntersection(List<PathIndex> selectedPathIndexes)
         {
             List<Intersection> intersectionsList = Target.Intersections.ToList();
-            intersectionsList.Add(new Intersection(selectedPathIndexes.ToArray()));
+            Intersection intersection = new Intersection(selectedPathIndexes.ToArray());
+            if (intersectionsList.Contains(intersection)) return;
+
+            intersectionsList.Add(intersection);
             Target.Intersections = intersectionsList.ToArray();
             ForceSceneUpdate();
         }
@@ -59,7 +85,29 @@ namespace EtienneEditor
         {
             Color color = Handles.color;
 
-            foreach (Path path in paths)
+            DrawWaypoints();
+            DrawPassages();
+
+            DrawDebug();
+
+            Handles.color = color;
+        }
+
+        private void DrawPassages()
+        {
+            Handles.color = Color.green;
+            foreach (Intersection intersection in Target.Intersections)
+            {
+                foreach (Passage passage in intersection.passages)
+                {
+                    Handles.DrawAAPolyLine(passage.GetPoints());
+                }
+            }
+        }
+
+        private void DrawWaypoints()
+        {
+            foreach (Path path in Target.paths)
             {
                 for (int i = 0; i < path.WorldWaypoints.Length; i++)
                 {
@@ -92,79 +140,38 @@ namespace EtienneEditor
                 Handles.color = Color.white;
                 Handles.DrawAAPolyLine(path.WorldWaypoints);
             }
-            Handles.color = Color.green;
-            foreach (Intersection intersection in Target.Intersections)
-            {
-                foreach (Passage passage in intersection.passages)
-                {
-                    //Handles.DrawAAPolyLine(passage.GetPoints());
-                }
-            }
-
-            DrawDebug();
-
-            Handles.color = color;
-        }
-
-        private PathIndex debugFound;
-        private PathIndex debugTargetFound;
-        private Vector3 debugPosition;
-        private Vector3 debugTargetPosition;
-        private void DebugFindClosestPoint(Vector3 debugPosition, Vector3 debugTargetPosition)
-        {
-            float minDistance = float.MaxValue;
-            foreach (Path path in paths)
-            {
-                for (int i = 0; i < path.WorldWaypoints.Length; i++)
-                {
-                    float distance = Vector3.Distance(debugPosition, path.WorldWaypoints[i]);
-                    if (distance >= minDistance) continue;
-                    minDistance = distance;
-                    debugFound.path = path;
-                    debugFound.index = i;
-                }
-            }
-            minDistance = float.MaxValue;
-            foreach (Path path in paths)
-            {
-                for (int i = 0; i < path.WorldWaypoints.Length; i++)
-                {
-                    float distance = Vector3.Distance(debugTargetPosition, path.WorldWaypoints[i]);
-                    if (distance >= minDistance) continue;
-                    minDistance = distance;
-                    debugTargetFound.path = path;
-                    debugTargetFound.index = i;
-                }
-            }
-            DebugFindClosestIntersection(debugFound);
-        }
-
-        private Passage debugpassageFound;
-        private void DebugFindClosestIntersection(PathIndex debugFound)
-        {
-            float minDistance = float.MaxValue;
-            foreach (Intersection intersection in Target.Intersections)
-            {
-                foreach (Passage passage in intersection.passages)
-                {
-                    if (passage.a.path != debugFound.path && passage.b.path != debugFound.path) continue;
-                    PathIndex path = passage.a.path == debugFound.path ? passage.a : passage.b;
-                    float distance = Vector3.Distance(debugFound.GetPoint(), path.GetPoint());
-                    if (distance >= minDistance) continue;
-                    debugpassageFound = passage;
-                }
-            }
         }
 
         private void DrawDebug()
         {
+
+            Vector3 targetold = debugTargetPosition;
+            debugTargetPosition = Handles.PositionHandle(debugTargetPosition, Quaternion.identity);
+            Vector3 old = debugPosition;
+            debugPosition = Handles.PositionHandle(debugPosition, Quaternion.identity);
+            if (targetold != debugTargetPosition || old != debugPosition) DebugFindPath();
+
+
             Handles.color = Color.red;
             Handles.DrawWireArc(Target.transform.position + debugTargetPosition, Vector3.up, Vector3.forward, 360f, .5f);
             if (debugTargetFound.path != null) Handles.DrawWireArc(debugTargetFound.GetPoint(), Vector3.up, Vector3.forward, 360f, .5f);
             Handles.color = Color.blue;
             Handles.DrawWireArc(Target.transform.position + debugPosition, Vector3.up, Vector3.forward, 360f, .5f);
             if (debugFound.path != null) Handles.DrawWireArc(debugFound.GetPoint(), Vector3.up, Vector3.forward, 360f, .5f);
-            if (debugpassageFound.a.path != null) Handles.DrawAAPolyLine(debugpassageFound.GetPoints());
+            if (debugPath.Count > 1)
+            {
+                Handles.color = EtienneEditor.EditorColor.Orange;
+                Handles.DrawAAPolyLine(debugPath.ToArray());
+            }
+
+            Handles.color = EditorColor.Red;
+
+            Intersection[] connectedIntersections = Target.GetPathIntersections(debugFound.path);
+            foreach (Intersection item in connectedIntersections)
+            {
+                Handles.DrawAAPolyLine(new Vector3[] { item.Center, item.Center + Vector3.up * 5 });
+            }
+            Handles.color = Color.white;
         }
     }
 }
