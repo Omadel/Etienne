@@ -125,7 +125,7 @@ namespace Etienne.Pools
 #if UNITY_WEBGL
         internal void EnqueueAfterDelay<T>(ComponentPool<T> pool, T item, float delay) where T : Component => StartCoroutine(EnqueueDelayRoutine(pool, item, delay));
 
-        private IEnumerator EnqueueDelayRoutine<T>(ComponentPool<T> pool, T item, float delay) where T : Component
+        private System.Collections.IEnumerator EnqueueDelayRoutine<T>(ComponentPool<T> pool, T item, float delay) where T : Component
         {
             yield return new WaitForSeconds(delay);
             pool.Enqueue(item);
