@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Etienne
@@ -31,7 +31,6 @@ namespace Etienne
 #if UNITY_EDITOR
             UnityEditor.SceneVisibilityManager.instance.Hide(canvas.gameObject, true);
 #endif
-            canvas.gameObject.hideFlags = HideFlags.HideInHierarchy;
             canvas.GetComponent<RawImage>().texture = mainTexture;
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.pixelPerfect = true;
