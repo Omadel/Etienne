@@ -28,12 +28,24 @@ namespace Etienne
                 canvas = go.AddComponent<Canvas>();
                 go.AddComponent<RawImage>();
             }
+#if UNITY_EDITOR
+            UnityEditor.SceneVisibilityManager.instance.Hide(canvas.gameObject, true);
+#endif
             canvas.gameObject.hideFlags = HideFlags.HideInHierarchy;
             canvas.GetComponent<RawImage>().texture = mainTexture;
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.pixelPerfect = true;
             canvas.sortingOrder = -999;
             OnValidate();
+        }
+
+        void OnDestroy()
+        {
+#if UNITY_EDITOR
+            GameObject.DestroyImmediate(transform.GetChild(0).gameObject);
+#else
+            GameObject.Destroy(transform.GetChild(0).gameObject);
+#endif
         }
 
         private void Update()
