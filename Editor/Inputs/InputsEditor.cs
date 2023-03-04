@@ -1,4 +1,5 @@
 #if ENABLE_INPUT_SYSTEM
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,6 +31,27 @@ namespace EtienneEditor
             CreateInputPostProcessor($"{path}/Editor/InputsEditorPostprocessor.cs");
             CreateInputSender($"{path}/InputSender.cs");
             CreateInputReader($"{path}/InputReader.cs");
+            CreateInputReaderEditor($"{path}/Editor/InputReaderEditor.cs");
+        }
+
+        private static void CreateInputReaderEditor(string path)
+        {
+            StringBuilder contents = new StringBuilder();
+            contents.AppendLine("using UnityEditor;");
+            contents.AppendLine("using UnityEngine;");
+            contents.AppendLine("");
+            string className = Path.GetFileNameWithoutExtension(path);
+            contents.AppendLine($"[CustomEditor(typeof({className.Replace("Editor","")}))]");
+            contents.AppendLine($"public class {className} : Editor");
+            contents.AppendLine("{");
+            contents.AppendLine("   public override void OnInspectorGUI()");
+            contents.AppendLine("   {");
+            contents.AppendLine($"       if(GUILayout.Button(\"Refresh InputSender\")) EditorUtility.RequestScriptReload();");
+            contents.AppendLine("   }");
+            contents.AppendLine("}");
+            string directory = Path.GetDirectoryName(path);
+            if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+            File.WriteAllText(path, contents.ToString());
         }
 
         private static void CreateInputPostProcessor(string path)
