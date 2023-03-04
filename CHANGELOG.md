@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [2023.0.2] 04/03/2023
+#Added
+- Inputs Editor
+- Inputs Sender
+- Inputs Reader
+- Inputs Editor PostProcessor
+It generates a C# class named `InputSender` so we can use C# Events to read player Inputs.
+
 ## [2023.0.1] 16/02/2023
 #Added
 - Pixellized Camera

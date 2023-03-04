@@ -1,6 +1,10 @@
 # Etienne
 Bundle of all my utilities
 
+## Input Handeling
+- Use Unity's `PlayerInput`, a `InputReader` will apear.
+- Now you can call the generated `InputSender` static class to subscribe to C# events
+
 ## Use the Etienne namespace :
 using Etienne;
 

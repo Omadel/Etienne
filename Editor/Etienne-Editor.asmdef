@@ -2,7 +2,8 @@
     "name": "Etienne-Editor",
     "rootNamespace": "EtienneEditor",
     "references": [
-        "GUID:22ded8885bc72c54599b382643fa9d31"
+        "Etienne",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [
         "Editor"
