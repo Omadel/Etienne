@@ -6,7 +6,7 @@ using UnityEditorInternal;
 using UnityEngine;
 
 namespace EtienneEditor {
-    [CustomEditor(typeof(Path))]
+    [CustomEditor(typeof(Path), true)]
     public class PathEditor : Editor<Path> {
 
         private SerializedProperty waypointsProperty;
