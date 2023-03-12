@@ -20,7 +20,8 @@ namespace Etienne {
         public Vector3[] LocalWaypoints => waypoints;
 
         [SerializeField, Range(1, 20)] private int resolution = 10;
-        [SerializeField] private Vector3[] waypoints;
+        [SerializeField] private Vector3[] waypoints = new Vector3[] {Vector3.up, Vector3.up*2};
+
 
         private static Vector3 CatmullRom(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
         {

@@ -100,7 +100,6 @@ namespace EtienneEditor
                 if (selectedIndex[i] >= waypointsProperty.arraySize)
                 {
                     selectedIndex.Remove(selectedIndex[i]);
-                    Debug.Log($"Removing index {i}");
                 }
             }
             serializedObject.ApplyModifiedProperties();
