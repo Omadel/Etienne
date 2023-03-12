@@ -8,6 +8,13 @@ Dates in European way
 
 ## [2023.0.2] 04/03/2023
 #Added
+- Path shortcut Ctrl+D (Duplicate)
+- Path shortcut Delete (Delete)
+- Path multi-selection (Ctrl+Click)
+- Path Catmull (Spline)
+
+## [2023.0.2] 04/03/2023
+#Added
 - Inputs Editor
 - Inputs Sender
 - Inputs Reader
