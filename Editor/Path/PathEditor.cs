@@ -2,12 +2,13 @@ using Etienne;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 
-namespace EtienneEditor {
+namespace EtienneEditor
+{
     [CustomEditor(typeof(Path), true)]
-    public class PathEditor : Editor<Path> {
+    public class PathEditor : Editor<Path>
+    {
 
         private SerializedProperty waypointsProperty;
         private List<int> selectedIndex = new List<int>();
@@ -15,6 +16,7 @@ namespace EtienneEditor {
         private void OnEnable()
         {
             waypointsProperty = serializedObject.FindProperty("waypoints");
+            HandleOutOfRange();
         }
 
         private void OnSceneGUI()
@@ -86,6 +88,13 @@ namespace EtienneEditor {
 
         private void HandleOutOfRange()
         {
+            if (waypointsProperty.arraySize < 2)
+            {
+                waypointsProperty.InsertArrayElementAtIndex(0);
+                waypointsProperty.GetArrayElementAtIndex(0).vector3Value = Vector3.up;
+                waypointsProperty.InsertArrayElementAtIndex(1);
+                waypointsProperty.GetArrayElementAtIndex(1).vector3Value = Vector3.up * 2;
+            }
             for (int i = selectedIndex.Count - 1; i >= 0; i--)
             {
                 if (selectedIndex[i] >= waypointsProperty.arraySize)
@@ -94,6 +103,7 @@ namespace EtienneEditor {
                     Debug.Log($"Removing index {i}");
                 }
             }
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawPositionHandles()
@@ -125,7 +135,7 @@ namespace EtienneEditor {
 
                 using (new Handles.DrawingScope(color))
                 {
-                    if (Handles.Button(position.vector3Value, rotation, size, size*.5f, Handles.SphereHandleCap))
+                    if (Handles.Button(position.vector3Value, rotation, size, size * .5f, Handles.SphereHandleCap))
                     {
                         if (!Event.current.control) selectedIndex.Clear();
                         if (selectedIndex.Contains(i)) selectedIndex.Remove(i);
