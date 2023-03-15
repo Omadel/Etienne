@@ -1,3 +1,4 @@
+
 # Etienne - Bundle of Utilities
 
 Etienne is a collection of utilities to simplify common tasks in game development.
@@ -21,7 +22,8 @@ Etienne provides the following audio utilities:
 - Audio Pool
 
 ## Timers
-
+<details><summary>Timers</summary>
+ 
 Etienne includes a timer utility with the following methods:
 
 - timer.Start(<float>): starts a timer with the given duration
@@ -32,7 +34,8 @@ Etienne includes a timer utility with the following methods:
 - timer.Pause(): pauses the timer
 - timer.Play(): resumes the timer (automatic, use Play() only when the timer has been paused beforehand)
 - timer.Restart(): restarts the timer (sets the time to 0)
-  
+ </details>
+ 
 ## Singletons
 
 To create a singleton in Etienne, use the following syntax:
@@ -41,9 +44,9 @@ To create a singleton in Etienne, use the following syntax:
 
 If needed, you can override the Awake() method.
 
-<details>
-<summary>## Attributes</summary>
 ## Attributes
+<details><summary>Attributes</summary>
+ 
 ### Requirement
 Use the **[Requirement(typeof(Type))]** attribute to enforce a requirement for a specific **Component**. This attribute can be used on classes that inherit from MonoBehaviourWithRequirement.
 If the requirement is not met, a warning message will be displayed in the inspector.
@@ -63,6 +66,7 @@ Use the **[MinMaxRange(min, max)]** attribute to limit a Range property to a spe
 Use the **[RangeLabelled(min, max, labelMin, labelMax)]** attribute to display a labelled range slider for a float property.
 ### ReadOnly
 Use the **[ReadOnly]** attribute to make a property read-only in the inspector.
+ 
 </details>
   
   
