@@ -40,7 +40,9 @@ To create a singleton in Etienne, use the following syntax:
 ```class ClassName : Singleton<ClassName>```
 
 If needed, you can override the Awake() method.
-  
+
+<details>
+<summary>## Attributes</summary>
 ## Attributes
 ### Requirement
 Use the **[Requirement(typeof(Type))]** attribute to enforce a requirement for a specific **Component**. This attribute can be used on classes that inherit from MonoBehaviourWithRequirement.
@@ -61,7 +63,7 @@ Use the **[MinMaxRange(min, max)]** attribute to limit a Range property to a spe
 Use the **[RangeLabelled(min, max, labelMin, labelMax)]** attribute to display a labelled range slider for a float property.
 ### ReadOnly
 Use the **[ReadOnly]** attribute to make a property read-only in the inspector.
-  
+</details>
   
   
   
