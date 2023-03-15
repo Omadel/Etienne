@@ -69,37 +69,32 @@ Use the **[ReadOnly]** attribute to make a property read-only in the inspector.
  
 </details>
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+## Range Class
+
+<details><summary>Attributes</summary>
+ 
+ 
+ The **Range** class represents a range with a minimum and a maximum value. It is a struct, which means it is a value type and is copied when passed around rather than being referenced.
+
+### Constructors
+- **Range(Range range)** - Creates a new **Range** object with the same minimum and maximum values as the provided Range.
+- **Range(float max)** - Creates a new **Range** object with a minimum value of 0 and the provided maximum value.
+- **Range(float min, float max)** - Creates a new **Range** object with the provided minimum and maximum values.
+### Fields
+- **public float Min** - The minimum value of the range.
+- **public float Max** - The maximum value of the range.
+### Properties
+- **public static Range One** - A shorthand property for creating a **Range** object with minimum 0 and maximum 1.
+- **public static Range Hundred** - A shorthand property for creating a **Range** object with minimum 0 and maximum 100.
+### Methods
+- **public bool Contains(float value)** - Returns true if the provided value is contained within the range.
+- **public float Lerp(float value)** - Linearly interpolates between the minimum and maximum values of the range by the provided interpolation value.
+- **public float Normalize(float value)** - Normalizes the provided value using the ratio between the minimum and maximum values of the range, resulting in a float between 0 and 1.
+- **public float Clamp(float value)** - Clamps the provided value between the minimum and maximum values of the range. If the value is within the range, it is returned as is. Otherwise, if it is below the range, the minimum value is returned. If it is above the range, the maximum value is returned. If the provided value is not within the range, an exception is thrown.
+- **public override string ToString()** - Returns a string representation of the range, with the minimum and maximum values formatted to two decimal places.
+- **public string ToString(string format, IFormatProvider formatProvider = null)** - Returns a string representation of the range, with the minimum and maximum values formatted using the provided format and format provider.
+### IFormattable Implementation
+- **public string ToString(string format, IFormatProvider formatProvider = null)** - Returns a string representation of the range, with the minimum and maximum values formatted using the provided format and format provider.
+ 
+</details>
   
