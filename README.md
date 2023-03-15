@@ -23,18 +23,143 @@ Etienne provides the following audio utilities:
 - Audio Cue (random sound from a list of clips)
 - Audio Pool
 
-<details><summary><h2>Timers</h2></summary>
- 
-Etienne includes a timer utility with the following methods:
+<details>
+	<summary><h2>Timer Class</h2></summary>
+	<ul>
+The Timer class provides a simple way to create a timer in Unity. It allows you to specify a duration and listen for updates and completion events. The Timer class uses a TimerManager to manage all active timers in the scene.
 
-- timer.Start(<float>): starts a timer with the given duration
-- timer.OnComplete(<delegate>): sets a delegate to be called when the timer completes
-- timer.OnUpdate(<delegate(float)>): sets a delegate to be called when the timer updates, passing the time spent as a parameter
-- timer.Complete(): completes the timer prematurely
-- timer.Kill(): completes the timer without triggering the OnComplete delegate
-- timer.Pause(): pauses the timer
-- timer.Play(): resumes the timer (automatic, use Play() only when the timer has been paused beforehand)
-- timer.Restart(): restarts the timer (sets the time to 0)
+<li><details>
+	<summary><h3>Constructors</h3></summary>
+  
+```cs
+private Timer()
+```
+The constructor for the Timer class. It is private to ensure that only the TimerManager can create timers.
+</br></br>
+  
+</details> </li>
+<li><details>
+	<summary><h3>Fields</h3></summary>
+  
+```cs   
+public bool IsPlaying
+```  
+A read-only boolean that indicates whether the timer is currently playing.
+</br></br>
+```cs   
+public float Duration
+```  
+A read-only float that indicates the duration of the timer.
+</br></br>
+```cs   
+public float Time
+```  
+A read-only float that indicates the current time of the timer.
+</br></br>
+</details></li>
+<li><details>
+	<summary><h3>Methods</h3></summary>
+  
+```cs   
+public Timer OnUpdate(Action<float> onUpdate)
+```  
+Adds a listener for the update event of the timer. The listener is called with the current time of the timer as a float parameter.
+</br></br>
+
+```cs   
+public void Restart()
+```   
+Restarts the timer from the beginning.
+</br></br>
+
+```cs   
+public void Pause()
+```   
+Pauses the timer.
+</br></br>
+
+```cs   
+public void Play()
+```   
+Resumes the timer if it was paused.
+</br></br>
+
+```cs   
+public void SetDuration(float duration)
+```   
+Sets the duration of the timer.
+</br></br>
+
+```cs   
+public Timer OnComplete(Action onComplete)
+```   
+Adds a listener for the completion event of the timer. The listener is called when the timer reaches its duration.
+</br></br>
+
+```cs   
+public void Complete()
+```   
+Completes the timer and invokes the completion event.
+</br></br>
+
+```cs   
+public void Kill()
+```   
+Stops the timer and removes it from the TimerManager. If the timer was set to enqueue when completed, it is added to the timer queue.
+</br></br>
+
+```cs   
+public static Timer Create(float duration, bool enQueueWhenCompleted = true)
+```   
+Creates a new timer and sets its duration. If enQueueWhenCompleted is true, the timer is added to the timer queue when completed.
+</br></br>
+
+```cs   
+public static Timer Start(float duration, bool enQueueWhenCompleted = true)
+```   
+Creates a new timer and starts it. If enQueueWhenCompleted is true, the timer is added to the timer queue when completed.
+</br></br>
+
+</details> </li>
+<li><details>
+	<summary><h3>Usage</h3></summary>
+To create a new Timer object, use the Create or Start methods:
+
+```cs
+// create a timer and set its duration to 5 seconds
+Timer myTimer = Timer.Create(5f);
+
+// start a timer and set its duration to 3 seconds
+Timer.Start(3f);
+```
+You can add listeners to the update and completion events:
+
+```cs
+myTimer.OnUpdate((time) => {
+    // do something with the current time of the timer
+});
+
+myTimer.OnComplete(() => {
+    // do something when the timer completes
+});
+```
+You can control the timer with the Pause, Play, Restart, and Kill methods:
+
+```cs
+myTimer.Pause();
+myTimer.Play();
+myTimer.Restart();
+myTimer.Kill();
+```
+You can also get information about the timer using the IsPlaying, Duration, and Time properties:
+
+```cs
+bool isPlaying = myTimer.IsPlaying;
+float duration = myTimer.Duration;
+float time = myTimer.Time;
+```
+</details> </li>
+</ul>
 </details>
  
  
