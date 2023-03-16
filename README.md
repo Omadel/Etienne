@@ -391,8 +391,9 @@ The **MinMaxRangeAttribute** class is an attribute that can be applied to fields
 - To use the **MinMaxRangeAttribute**, apply it to a field in a Unity script with two float values, such as:
  
 ```cs
+using Etienne;
 public class ExampleScript : MonoBehaviour {
-	[MinMaxRange(0f, 10f)] public Vector2 speedRange;
+	[MinMaxRange(0f, 10f)] public Etienne.Range speedRange;
 }
 ```
  
