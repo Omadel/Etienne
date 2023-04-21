@@ -48,6 +48,13 @@ namespace Etienne.Pools
 
         public static AudioSource Play(Sound sound)
         {
+            AudioSource source = PlayNoEnqueue(sound);
+            instance.DelayedEnqueue(source, source.clip.length * 1.1f);
+            return source;
+        }
+
+        private static AudioSource PlayNoEnqueue(Sound sound)
+        {
             if (instance == null)
             {
                 instance = CreateInstance<AudioSourcePool>(100);
@@ -57,7 +64,6 @@ namespace Etienne.Pools
             AudioSource source = instance.Dequeue();
             source.SetSoundToSource(sound);
             source.Play();
-            instance.DelayedEnqueue(source, source.clip.length * 1.1f);
             return source;
         }
 
@@ -81,7 +87,7 @@ namespace Etienne.Pools
 
         public static AudioSource PlayLooped(Sound sound, Vector3 position)
         {
-            AudioSource source = Play(sound);
+            AudioSource source = PlayNoEnqueue(sound);
             source.loop = true;
             source.transform.position = position;
             return source;
@@ -89,7 +95,7 @@ namespace Etienne.Pools
 
         public static AudioSource PlayLooped(Sound sound, Transform transform = null)
         {
-            AudioSource source = Play(sound);
+            AudioSource source = PlayNoEnqueue(sound);
             source.loop = true;
             if (transform != null)
             {

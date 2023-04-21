@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [2023.0.3] 21/04/2023
+#Fixed
+- Audio play looped no enqueue
+
 ## [2023.0.2] 04/03/2023
 #Added
 - Path shortcut Ctrl+D (Duplicate)
