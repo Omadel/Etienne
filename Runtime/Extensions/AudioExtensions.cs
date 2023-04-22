@@ -21,6 +21,7 @@ namespace Etienne
         public static void StopLoop(this AudioSource source)
         {
             source.Stop();
+            source.loop = false;
             Pools.AudioSourcePool.Instance.Enqueue(source);
         }
     }
