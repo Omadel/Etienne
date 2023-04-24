@@ -9,6 +9,8 @@ Dates in European way
 ## [2023.0.3] 21/04/2023
 #Fixed
 - Audio play looped no enqueue
+#Removed
+- Unfinished Navpath
 
 ## [2023.0.2] 04/03/2023
 #Added
