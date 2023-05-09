@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Etienne
@@ -31,8 +30,8 @@ namespace Etienne
 
         public static Timer Start(float duration, bool enQueueWhenCompleted = true)
         {
-            Timer timer = Start(duration, enQueueWhenCompleted);
-            Manager.Add(timer);
+            Timer timer = Create(duration, enQueueWhenCompleted);
+            timer.Restart();
             return timer;
         }
 
@@ -49,9 +48,9 @@ namespace Etienne
         private bool enQueueWhenCompleted;
 
 
-        private Timer() { }
+        internal Timer() { }
 
-        private void Update()
+        internal void Update()
         {
             if (isPaused) return;
             time += UnityEngine.Time.deltaTime;
@@ -110,54 +109,21 @@ namespace Etienne
             onComplete?.Invoke();
         }
 
-        public void Kill()
+        public void Kill() => Kill(enQueueWhenCompleted);
+        public void Kill(bool enqueue)
         {
             isPlaying = false;
-            Manager.Remove(this, enQueueWhenCompleted);
+            if (enqueue)
+            {
+                onComplete = null;
+                onUpdate = null;
+            }
+            Manager.Remove(this, enqueue);
         }
 
         private void OnApplicationQuit()
         {
             manager = null;
-        }
-
-        private class TimerManager : MonoBehaviour
-        {
-            private List<Timer> timers = new List<Timer>();
-            private Queue<Timer> timerQueue = new Queue<Timer>();
-
-            protected void Awake()
-            {
-                enabled = false;
-            }
-
-            public Timer GetTimer()
-            {
-                if (timerQueue.TryDequeue(out Timer timer)) return timer;
-                return new Timer();
-            }
-
-            public void Add(Timer timer)
-            {
-                enabled = true;
-                if (timers.Contains(timer)) return;
-                timers.Add(timer);
-            }
-
-            public void Remove(Timer timer, bool enQueueWhenCompleted)
-            {
-                timers.Remove(timer);
-                if (!enQueueWhenCompleted) timerQueue.Enqueue(timer);
-                if (timers.Count <= 0) enabled = false;
-            }
-
-            private void Update()
-            {
-                foreach (Timer timer in new List<Timer>(timers))
-                {
-                    timer.Update();
-                }
-            }
         }
     }
 }
