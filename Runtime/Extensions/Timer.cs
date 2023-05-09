@@ -14,7 +14,7 @@ namespace Etienne
                 GameObject go = new GameObject(nameof(TimerManager));
                 manager = go.AddComponent<TimerManager>();
                 go.hideFlags = HideFlags.NotEditable;
-                GameObject.DontDestroyOnLoad(go);
+               // GameObject.DontDestroyOnLoad(go);
                 return manager;
             }
         }
