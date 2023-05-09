@@ -14,7 +14,7 @@ namespace Etienne
                 GameObject go = new GameObject(nameof(TimerManager));
                 manager = go.AddComponent<TimerManager>();
                 go.hideFlags = HideFlags.NotEditable;
-               // GameObject.DontDestroyOnLoad(go);
+                GameObject.DontDestroyOnLoad(go);
                 return manager;
             }
         }
@@ -110,13 +110,10 @@ namespace Etienne
             onComplete?.Invoke();
         }
 
-        public void Kill() => Kill(enQueueWhenCompleted);
-        public void Kill(bool enQueue)
+        public void Kill()
         {
             isPlaying = false;
-            Manager.Remove(this, enQueue);
-            onComplete = null;
-            onUpdate = null;
+            Manager.Remove(this, enQueueWhenCompleted);
         }
 
         private void OnApplicationQuit()
