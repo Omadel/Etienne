@@ -110,10 +110,13 @@ namespace Etienne
             onComplete?.Invoke();
         }
 
-        public void Kill()
+        public void Kill() => Kill(enQueueWhenCompleted);
+        public void Kill(bool enQueue)
         {
             isPlaying = false;
-            Manager.Remove(this, enQueueWhenCompleted);
+            Manager.Remove(this, enQueue);
+            onComplete = null;
+            onUpdate = null;
         }
 
         private void OnApplicationQuit()
