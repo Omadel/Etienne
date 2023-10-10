@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [2023.0.4] 10/10/2023
+#Fixed
+- Better Singleton<T>
+
 ## [2023.0.3] 21/04/2023
 #Fixed
 - Audio play looped no enqueue
