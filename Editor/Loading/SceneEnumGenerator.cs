@@ -45,12 +45,10 @@ namespace EtienneEditor
 
         private static void SaveEnumAsset(string contents)
         {
-            EditorUtility.DisplayProgressBar("Updating Build Scene Enum", "Writing asset", 0f);
             string path = Application.dataPath + PATH;
             string directory = Path.GetDirectoryName(path);
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
             File.WriteAllText(path, contents.ToString());
-            EditorUtility.ClearProgressBar();
             AssetDatabase.ImportAsset("Assets" + path.Substring(Application.dataPath.Length));
         }
 
