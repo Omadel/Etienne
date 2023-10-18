@@ -50,9 +50,8 @@ namespace EtienneEditor
             string directory = Path.GetDirectoryName(path);
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
             File.WriteAllText(path, contents.ToString());
-            EditorUtility.DisplayProgressBar("Updating Build Scene Enum", "Refreshing Asset", .4f);
-            AssetDatabase.ImportAsset("Assets" + path.Substring(Application.dataPath.Length));
             EditorUtility.ClearProgressBar();
+            AssetDatabase.ImportAsset("Assets" + path.Substring(Application.dataPath.Length));
         }
 
         private static string[] GetBuildSceneNames()
