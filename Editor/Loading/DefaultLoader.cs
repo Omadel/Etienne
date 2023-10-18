@@ -1,7 +1,7 @@
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
-using static UnityEditor.SceneManagement.EditorSceneManager;
-using static UnityEngine.SceneManagement.SceneManager;
+using UnityEngine.SceneManagement;
 
 namespace EtienneEditor
 {
@@ -39,9 +39,9 @@ namespace EtienneEditor
 
         private static void LoadDefaultScene(PlayModeStateChange state)
         {
-            if(!useDefaultLoader) return;
+            if (!useDefaultLoader) return;
 
-            switch(state)
+            switch (state)
             {
                 case PlayModeStateChange.EnteredEditMode:
                     GoBackToCurrentScene();
@@ -59,46 +59,47 @@ namespace EtienneEditor
 
         private static void LoadDefaultScene()
         {
-            if(GetActiveScene() == GetSceneByBuildIndex(defaultSceneBuildIndex)) return;
+            if (SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(defaultSceneBuildIndex)) return;
 
             Debug.Log($"<b>Etienne Default Loader</b> <color=green>used</color>, loading default scene{System.Environment.NewLine}To change the settings go to <b>Tools>Etienne>Etienne Utility Panel</b>");
 
-            LoadScene(defaultSceneBuildIndex);
+            SceneManager.LoadScene(defaultSceneBuildIndex);
         }
 
         private static void GoBackToCurrentScene()
         {
-            if(goBackToCurrentScene) return;
+            if (goBackToCurrentScene) return;
 
             string name = PrefsKeys.CurrentSceneName;
-            if(string.IsNullOrEmpty(name)) return;
-            LoadScene(name);
+            if (string.IsNullOrEmpty(name)) return;
+            EditorSceneManager.OpenScene(name, OpenSceneMode.Single);
         }
 
         private static void SaveCurrentScene()
         {
-            if(saveCurrentScene)
+            if (saveCurrentScene)
             {
-                if(!SaveCurrentModifiedScenesIfUserWantsTo()) EditorApplication.ExitPlaymode();
-            } else
+                if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) EditorApplication.ExitPlaymode();
+            }
+            else
             {
-                SaveOpenScenes();
+                EditorSceneManager.SaveOpenScenes();
             }
 
-            if(goBackToCurrentScene) return;
+            if (goBackToCurrentScene) return;
 
-            PrefsKeys.CurrentSceneName = System.IO.Path.GetFileNameWithoutExtension(GetActiveScene().path);
+            PrefsKeys.CurrentSceneName = SceneManager.GetActiveScene().path;
         }
 
         private static string[] FetchSceneNames()
         {
             string[] names = new string[EditorBuildSettings.scenes.Length];
-            for(int i = 0; i < names.Length; i++)
+            for (int i = 0; i < names.Length; i++)
             {
                 string name = System.IO.Path.GetFileNameWithoutExtension(EditorBuildSettings.scenes[i].path);
                 names[i] = name;
             }
-            if(defaultSceneBuildIndex >= names.Length)
+            if (defaultSceneBuildIndex >= names.Length)
             {
                 defaultSceneBuildIndex = 0;
             }
@@ -131,8 +132,8 @@ namespace EtienneEditor
 
             EditorGUILayout.LabelField("Default scene", EditorStyles.boldLabel);
 
-            if(buildSceneNames == null || buildSceneNames.Length != sceneCount) buildSceneNames = FetchSceneNames();
-            for(int i = 0; i < buildSceneNames.Length; i++)
+            if (buildSceneNames == null || buildSceneNames.Length != SceneManager.sceneCount) buildSceneNames = FetchSceneNames();
+            for (int i = 0; i < buildSceneNames.Length; i++)
             {
                 EditorGUILayout.BeginHorizontal();
 
@@ -143,7 +144,7 @@ namespace EtienneEditor
 
                 EditorGUI.BeginChangeCheck();
                 EditorGUI.Toggle(rect, buildSceneNames[i], defaultSceneBuildIndex == i);
-                if(EditorGUI.EndChangeCheck())
+                if (EditorGUI.EndChangeCheck())
                 {
                     defaultSceneBuildIndex = i;
                 }
