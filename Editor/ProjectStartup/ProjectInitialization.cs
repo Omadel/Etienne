@@ -57,8 +57,12 @@ namespace EtienneEditor
             EditorGUI.EndDisabledGroup();
             EditorGUILayout.EndVertical();
 
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             PrefsKeys.GenerateBuildScenesEnum = EditorGUILayout.Toggle(new GUIContent("Generate Build Scenes Enum",
                  "Generate build scenes enum when builds settings are changed."), PrefsKeys.GenerateBuildScenesEnum);
+            PrefsKeys.AutoGenerateBuildScenesEnum = EditorGUILayout.Toggle(new GUIContent("Auto Generate",
+                 "Generate without dialog when build scenes enum when builds settings are changed."), PrefsKeys.AutoGenerateBuildScenesEnum);
+            EditorGUILayout.EndVertical();
         }
     }
 }

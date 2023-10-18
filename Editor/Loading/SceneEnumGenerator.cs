@@ -28,10 +28,12 @@ namespace EtienneEditor
             hasChanged = true;
 
             string[] sceneNames = GetBuildSceneNames();
-
-            if (!force && !EditorUtility.DisplayDialog("Scenes In Build Settings Changed",
-                "Scenes in build settings have been change, do you want to update the BuildScene Enum ?",
-                "Yes", "Not now")) return;
+            if (!PrefsKeys.AutoGenerateBuildScenesEnum)
+            {
+                if (!force && !EditorUtility.DisplayDialog("Scenes In Build Settings Changed",
+                    "Scenes in build settings have been change, do you want to update the BuildScene Enum ?",
+                    "Yes", "Not now")) return;
+            }
 
             StringBuilder sb = new StringBuilder("public enum BuildScenes {\n");
             for (int i = 0; i < sceneNames.Length; i++)

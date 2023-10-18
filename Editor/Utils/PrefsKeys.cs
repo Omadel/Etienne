@@ -25,6 +25,11 @@ namespace EtienneEditor
             get => _GenerateBuildScenesEnum.GetValue();
             set => _GenerateBuildScenesEnum.SetValue(value);
         }
+        internal static bool AutoGenerateBuildScenesEnum
+        {
+            get => _AutoGenerateBuildScenesEnum.GetValue();
+            set => _AutoGenerateBuildScenesEnum.SetValue(value);
+        }
         internal static int BootStrapperObjectID
         {
             get => _BootStrapperObjectID.GetValue();
@@ -50,6 +55,7 @@ namespace EtienneEditor
         private static Prefbool _UseDefaultLoader = new Prefbool("EtienneEditor.UseDefaultLoader");
         private static Prefbool _UseBootStrapper = new Prefbool("EtienneEditor.UseBootStrapper");
         private static Prefbool _GenerateBuildScenesEnum = new Prefbool("EtienneEditor.GenerateBuildScenesEnum");
+        private static Prefbool _AutoGenerateBuildScenesEnum = new Prefbool("EtienneEditor.AutoGenerateBuildScenesEnum");
         private static Prefint _BootStrapperObjectID = new Prefint("EtienneEditor._BootStrapperObjectID");
         private static Prefstring _CurrentSceneName = new Prefstring("EtienneEditor.CurrentSceneName");
         private static Prefstring _PackageCurrentVersion = new Prefstring("EtienneEditor.PackageCurrentVersion");
