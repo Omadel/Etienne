@@ -33,7 +33,7 @@ namespace EtienneEditor
                 "Scenes in build settings have been change, do you want to update the BuildScene Enum ?",
                 "Yes", "Not now")) return;
 
-            StringBuilder sb = new StringBuilder("public enum BulidScenes {\n");
+            StringBuilder sb = new StringBuilder("public enum BuildScenes {\n");
             for (int i = 0; i < sceneNames.Length; i++)
             {
                 sb.AppendLine($"\t{sceneNames[i].Replace(" ", string.Empty)} = {i}{((i + 1) >= sceneNames.Length ? "" : ",")}");
@@ -49,7 +49,6 @@ namespace EtienneEditor
             string directory = Path.GetDirectoryName(path);
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
             File.WriteAllText(path, contents.ToString());
-            //AssetDatabase.ImportAsset("Assets" + path.Substring(Application.dataPath.Length));
         }
 
         private static string[] GetBuildSceneNames()
