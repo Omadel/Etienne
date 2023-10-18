@@ -19,7 +19,7 @@ namespace EtienneEditor
         public static void CreateDirectories(string root, params string[] dirs)
         {
             string fullpath = Combine(dataPath, root);
-            foreach(string dir in dirs)
+            foreach (string dir in dirs)
             {
                 CreateDirectory(Combine(fullpath, dir));
             }

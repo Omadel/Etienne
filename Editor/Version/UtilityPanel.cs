@@ -30,10 +30,10 @@ namespace EtienneEditor
         {
             GUILayout.Space(10);
             BeginHorizontal();
-            for(int i = 0; i < tabs.Length; i++)
+            for (int i = 0; i < tabs.Length; i++)
             {
                 EditorGUI.BeginDisabledGroup(i == selectIndex);
-                if(GUILayout.Button(tabs[i], GUILayout.Height(35)))
+                if (GUILayout.Button(tabs[i], GUILayout.Height(35)))
                 {
                     selectIndex = i;
                     break;
@@ -41,7 +41,9 @@ namespace EtienneEditor
                 EditorGUI.EndDisabledGroup();
             }
             EndHorizontal();
-            switch(selectIndex)
+
+            BeginVertical(EditorStyles.helpBox);
+            switch (selectIndex)
             {
                 case 0:
                     ProjectInitialization.DrawGUI();
@@ -55,6 +57,7 @@ namespace EtienneEditor
                 default:
                     break;
             }
+            EndVertical();
         }
 
         private static void DrawVersion()
@@ -69,7 +72,7 @@ namespace EtienneEditor
 
             EndHorizontal();
 
-            if(GUILayout.Button("Check Package")) VersionChecker.CheckVersion();
+            if (GUILayout.Button("Check Package")) VersionChecker.CheckVersion();
         }
     }
 }

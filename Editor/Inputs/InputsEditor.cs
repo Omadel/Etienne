@@ -1,5 +1,4 @@
 #if ENABLE_INPUT_SYSTEM
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -41,7 +40,7 @@ namespace EtienneEditor
             contents.AppendLine("using UnityEngine;");
             contents.AppendLine("");
             string className = Path.GetFileNameWithoutExtension(path);
-            contents.AppendLine($"[CustomEditor(typeof({className.Replace("Editor","")}))]");
+            contents.AppendLine($"[CustomEditor(typeof({className.Replace("Editor", "")}))]");
             contents.AppendLine($"public class {className} : Editor");
             contents.AppendLine("{");
             contents.AppendLine("   public override void OnInspectorGUI()");
