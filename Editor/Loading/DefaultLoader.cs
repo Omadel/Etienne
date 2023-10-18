@@ -1,5 +1,4 @@
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,16 +12,6 @@ namespace EtienneEditor
         {
             get => PrefsKeys.UseDefaultLoader;
             set => PrefsKeys.UseDefaultLoader = value;
-        }
-        private static bool goBackToCurrentScene
-        {
-            get => PrefsKeys.GoBackToCurrentScene;
-            set => PrefsKeys.GoBackToCurrentScene = value;
-        }
-        private static bool saveCurrentScene
-        {
-            get => PrefsKeys.AutoSaveCurrentScene;
-            set => PrefsKeys.AutoSaveCurrentScene = value;
         }
         private static int defaultSceneBuildIndex
         {
@@ -44,10 +33,8 @@ namespace EtienneEditor
             switch (state)
             {
                 case PlayModeStateChange.EnteredEditMode:
-                    GoBackToCurrentScene();
                     break;
                 case PlayModeStateChange.ExitingEditMode:
-                    SaveCurrentScene();
                     break;
                 case PlayModeStateChange.EnteredPlayMode:
                     LoadDefaultScene();
@@ -61,34 +48,12 @@ namespace EtienneEditor
         {
             if (SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(defaultSceneBuildIndex)) return;
 
+            System.Reflection.Assembly.GetAssembly(typeof(Editor))
+                .GetType("UnityEditor.LogEntries")
+                .GetMethod("Clear")
+                .Invoke(new object(), null);
             Debug.Log($"<b>Etienne Default Loader</b> <color=green>used</color>, loading default scene{System.Environment.NewLine}To change the settings go to <b>Tools>Etienne>Etienne Utility Panel</b>");
-
             SceneManager.LoadScene(defaultSceneBuildIndex);
-        }
-
-        private static void GoBackToCurrentScene()
-        {
-            if (goBackToCurrentScene) return;
-
-            string name = PrefsKeys.CurrentSceneName;
-            if (string.IsNullOrEmpty(name)) return;
-            EditorSceneManager.OpenScene(name, OpenSceneMode.Single);
-        }
-
-        private static void SaveCurrentScene()
-        {
-            if (saveCurrentScene)
-            {
-                if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) EditorApplication.ExitPlaymode();
-            }
-            else
-            {
-                EditorSceneManager.SaveOpenScenes();
-            }
-
-            if (goBackToCurrentScene) return;
-
-            PrefsKeys.CurrentSceneName = SceneManager.GetActiveScene().path;
         }
 
         private static string[] FetchSceneNames()
@@ -110,20 +75,9 @@ namespace EtienneEditor
         {
             useDefaultLoader = EditorGUILayout.BeginToggleGroup("Use default loader", useDefaultLoader);
 
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-
             DrawScenesBox();
-            DrawSettings();
-
-            EditorGUILayout.EndVertical();
 
             EditorGUILayout.EndToggleGroup();
-        }
-        private static void DrawSettings()
-        {
-            saveCurrentScene = EditorGUILayout.Toggle("Auto save current scene", saveCurrentScene);
-
-            goBackToCurrentScene = EditorGUILayout.Toggle("Go back to current scene", goBackToCurrentScene);
         }
 
         private static void DrawScenesBox()

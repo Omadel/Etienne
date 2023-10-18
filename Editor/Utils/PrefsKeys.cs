@@ -30,16 +30,6 @@ namespace EtienneEditor
             get => _CurrentSceneName.GetValue();
             set => _CurrentSceneName.SetValue(value);
         }
-        internal static bool GoBackToCurrentScene
-        {
-            get => _GoBackToCurrentScene.GetValue();
-            set => _GoBackToCurrentScene.SetValue(value);
-        }
-        internal static bool AutoSaveCurrentScene
-        {
-            get => _AutoSaveCurrentScene.GetValue();
-            set => _AutoSaveCurrentScene.SetValue(value);
-        }
         internal static string PackageCurrentVersion
         {
             get => _PackageCurrentVersion.GetValue();
@@ -56,8 +46,6 @@ namespace EtienneEditor
         private static Prefbool _UseBootStrapper = new Prefbool("EtienneEditor.UseBootStrapper");
         private static Prefint _BootStrapperObjectID = new Prefint("EtienneEditor._BootStrapperObjectID");
         private static Prefstring _CurrentSceneName = new Prefstring("EtienneEditor.CurrentSceneName");
-        private static Prefbool _GoBackToCurrentScene = new Prefbool("EtienneEditor.GoBackToCurrentScene");
-        private static Prefbool _AutoSaveCurrentScene = new Prefbool("EtienneEditor.SaveCurrentScene");
         private static Prefstring _PackageCurrentVersion = new Prefstring("EtienneEditor.PackageCurrentVersion");
         private static Prefstring _PackageUrlVersion = new Prefstring("EtienneEditor.PackageUrlVersion");
 
