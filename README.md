@@ -1,3 +1,6 @@
+<img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/y/Omadel/Etienne"> <img alt="GitHub last commit (by committer)" src="https://img.shields.io/github/last-commit/Omadel/Etienne"> <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/Omadel/Etienne/total">
+
+
 
 # Etienne - Bundle of Utilities
 
