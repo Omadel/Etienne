@@ -1,4 +1,5 @@
-<img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/y/Omadel/Etienne?style=for-the-badge"> <img alt="GitHub last commit (by committer)" src="https://img.shields.io/github/last-commit/Omadel/Etienne?style=for-the-badge"> <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/Omadel/Etienne/total?style=for-the-badge">
+<img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/y/Omadel/Etienne?style=for-the-badge"> <img alt="GitHub last commit (by committer)" src="https://img.shields.io/github/last-commit/Omadel/Etienne?style=for-the-badge"> <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/Omadel/Etienne/total?style=for-the-badge"> <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/Omadel/Etienne?style=for-the-badge">
+
 
 
 # Etienne - Bundle of Utilities
