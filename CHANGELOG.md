@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Dates in European way
 
+## [2024.0.0] 28/06/2024
+#Added
+- LoopingSounds
+#Fixed
+- ComponentPools typo in error message
+- several formatting
+
 ## [2023.0.4] 10/10/2023
 #Fixed
 - Better Singleton<T>
