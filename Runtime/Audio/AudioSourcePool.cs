@@ -4,14 +4,13 @@ namespace Etienne.Pools
 {
     public class AudioSourcePool : ComponentPool<AudioSource>
     {
-        public static AudioSourcePool Instance => instance;
-        private static AudioSourcePool instance;
+        public static AudioSourcePool Instance { get; private set; }
 
         protected override void CreatePool(int maxSize, params object[] additionnalParameters)
         {
+            if (Instance != null) return;
             base.CreatePool(maxSize, additionnalParameters);
-            if (instance != null) return;
-            instance = this;
+            Instance = this;
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.playModeStateChanged -= EditorDestroyInstance;
             UnityEditor.EditorApplication.playModeStateChanged += EditorDestroyInstance;
@@ -22,87 +21,117 @@ namespace Etienne.Pools
         private void EditorDestroyInstance(UnityEditor.PlayModeStateChange state)
         {
             if (state != UnityEditor.PlayModeStateChange.ExitingPlayMode) return;
-            instance = null;
+            Instance = null;
         }
 #endif
 
-        public static AudioSource Play(Cue cue, int index, Vector3 position)
+        internal static AudioSource PrepareAudioSource(Sound sound)
         {
-            if (index < 0 || index >= cue.Clips.Length)
+            if (Instance == null)
             {
-                Debug.LogWarning("Index out of range, played random sound instead.");
-                return cue.Sound.Play(position);
+                Instance = CreateInstance<AudioSourcePool>(100);
+                Instance.Inspector.SetOnDestroy(() => Instance = null);
             }
-            return new Sound(cue.Clips[index], cue.Parameters).Play(position);
-        }
 
-        public static AudioSource Play(Cue cue, int index, Transform transform = null)
-        {
-            if (index < 0 || index >= cue.Clips.Length)
-            {
-                Debug.LogWarning("Index out of range, played random sound instead.");
-                return cue.Sound.Play(transform);
-            }
-            return new Sound(cue.Clips[index], cue.Parameters).Play(transform);
-        }
-
-        public static AudioSource Play(Sound sound)
-        {
-            AudioSource source = PlayNoEnqueue(sound);
-            instance.DelayedEnqueue(source, source.clip.length * 1.1f);
+            AudioSource source = Instance.Dequeue();
+            source.SetSoundToSource(sound);
             return source;
         }
 
-        private static AudioSource PlayNoEnqueue(Sound sound)
+        internal static AudioSource InternalPlay(Sound sound)
         {
-            if (instance == null)
-            {
-                instance = CreateInstance<AudioSourcePool>(100);
-                instance.inspector.SetOnDestroy(() => instance = null);
-            }
-
-            AudioSource source = instance.Dequeue();
-            source.SetSoundToSource(sound);
+            AudioSource source = PrepareAudioSource(sound);
             source.Play();
             return source;
         }
 
+        public static AudioSource Play(Sound sound)
+        {
+            AudioSource source = InternalPlay(sound);
+            Instance.DelayedEnqueue(source, source.clip.length + .01f);
+            return source;
+        }
         public static AudioSource Play(Sound sound, Vector3 position)
         {
             AudioSource source = Play(sound);
             source.transform.position = position;
             return source;
         }
-
-        public static AudioSource Play(Sound sound, Transform transform = null)
+        public static AudioSource Play(Sound sound, Transform transform)
         {
             AudioSource source = Play(sound);
-            if (transform != null)
-            {
-                source.transform.parent = transform;
-                source.transform.localPosition = Vector3.zero;
-            }
+            source.transform.SetParent(transform, false);
             return source;
         }
 
-        public static AudioSource PlayLooped(Sound sound, Vector3 position)
+        internal static AudioSource InternalPlayWithDelay(Sound sound, float delay)
         {
-            AudioSource source = PlayNoEnqueue(sound);
-            source.loop = true;
+            var source = PrepareAudioSource(sound);
+            source.PlayDelayed(delay);
+            return source;
+        }
+
+        public static AudioSource PlayWithDelay(Sound sound, float delay)
+        {
+            var source = InternalPlayWithDelay(sound, delay);
+            Instance.DelayedEnqueue(source, source.clip.length + .01f + delay);
+            return source;
+        }
+        public static AudioSource PlayWithDelay(Sound sound, Transform transform, float delay)
+        {
+            AudioSource source = Play(sound);
+            source.transform.SetParent(transform, false);
+            return source;
+        }
+        public static AudioSource PlayWithDelay(Sound sound, Vector3 position, float delay)
+        {
+            AudioSource source = Play(sound);
             source.transform.position = position;
             return source;
         }
 
-        public static AudioSource PlayLooped(Sound sound, Transform transform = null)
+
+        public static AudioSource PlayLooped(Sound sound)
         {
-            AudioSource source = PlayNoEnqueue(sound);
+            AudioSource source = InternalPlay(sound);
             source.loop = true;
-            if (transform != null)
-            {
-                source.transform.parent = transform;
-                source.transform.localPosition = Vector3.zero;
-            }
             return source;
+        }
+        public static AudioSource PlayLooped(Sound sound, Vector3 position)
+        {
+            AudioSource source = PlayLooped(sound);
+            source.transform.position = position;
+            return source;
+        }
+        public static AudioSource PlayLooped(Sound sound, Transform transform)
+        {
+            AudioSource source = PlayLooped(sound);
+            source.transform.SetParent(transform, false);
+            return source;
+        }
+
+        public static AudioSource PlayLoopedWithDelay(Sound sound, float delay)
+        {
+            AudioSource source = InternalPlayWithDelay(sound, delay);
+            source.loop = true;
+            return source;
+        }
+        public static AudioSource PlayLoopedWithDelay(Sound sound, Vector3 position, float delay)
+        {
+            AudioSource source = PlayLoopedWithDelay(sound, delay);
+            source.transform.position = position;
+            return source;
+        }
+        public static AudioSource PlayLoopedWithDelay(Sound sound, Transform transform, float delay)
+        {
+            AudioSource source = PlayLoopedWithDelay(sound, delay);
+            source.transform.SetParent(transform, false);
+            return source;
+        }
+
+        public static void ResetInstance()
+        {
+            Instance = null;
         }
     }
 }

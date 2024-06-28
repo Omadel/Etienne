@@ -8,69 +8,64 @@ namespace Etienne
         /// <summary>
         /// Random sound from cue's clips
         /// </summary>
-        public Sound Sound => new Sound(_Clips[Random.Range(0, _Clips.Length)], Parameters);
-        public AudioClip[] Clips => _Clips;
-        public SoundParameters Parameters => _Parameters ?? new SoundParameters(null);
+        public readonly Sound Sound => new(Clips[Random.Range(0, Clips.Length)], Parameters);
+        public readonly SoundParameters Parameters => _parameters ?? SoundParameters.DefaultParameters;
 
-        [SerializeField] private AudioClip[] _Clips;
-        [SerializeField] private SoundParametersScriptableObject _Parameters;
+        [field: SerializeField] public AudioClip[] Clips { get; }
+
+        [SerializeField] private SoundParametersScriptableObject _parameters;
 
         public Cue(AudioClip[] clips = null)
         {
-            _Clips = clips;
-            _Parameters = null;
+            Clips = clips;
+            _parameters = null;
         }
 
         public Cue(AudioClip[] clips, SoundParametersScriptableObject parameters)
         {
-            _Clips = clips;
-            _Parameters = parameters;
+            Clips = clips;
+            _parameters = parameters;
         }
 
         public static implicit operator Sound(Cue cue) => cue.Sound;
 
         public override string ToString()
         {
-            return (_Clips == null || _Clips.Length == 0) ? "Nothing" : $"Cue of {_Clips.Length} clips";
+            return (Clips == null || Clips.Length == 0) ? "Nothing" : $"Cue of {Clips.Length} clips";
         }
 
-        public AudioSource Play(int index, Transform transform = null)
+        public readonly AudioSource Play(int index) => GetSafeSoundAt(index)?.Play();
+        public readonly AudioSource Play(int index, Transform transform) => GetSafeSoundAt(index)?.Play(transform);
+        public readonly AudioSource Play(int index, Vector3 position) => GetSafeSoundAt(index)?.Play(position);
+
+        public readonly AudioSource Play() => GetSafeSound()?.Play();
+        public readonly AudioSource Play(Transform transform) => GetSafeSound()?.Play(transform);
+        public readonly AudioSource Play(Vector3 position) => GetSafeSound()?.Play(position);
+
+        private readonly Sound? GetSafeSoundAt(int index)
         {
-            return Pools.AudioSourcePool.Play(this, index, transform);
+            if (index < 0 || index >= Clips.Length)
+            {
+                Debug.LogWarning("Index out of range, played random sound instead.");
+                return GetSafeSound();
+            }
+            return new Sound(Clips[index], Parameters);
         }
 
-        public AudioSource Play(Transform transform = null)
+        private readonly Sound? GetSafeSound()
         {
-            if(_Clips == null || _Clips.Length <= 0)
+            if (Clips == null || Clips.Length <= 0)
             {
                 Debug.LogError("Cue is empty");
                 return null;
             }
-            Sound sound = Sound;
-            if(sound.Clip == null)
+            var sound = Sound;
+            if (sound.Clip == null)
             {
                 Debug.LogError("Clip in cue is empty");
                 return null;
             }
-
-            return sound.Play(transform);
-        }
-
-	    public AudioSource Play(Vector3 position)
-        {
-            if(_Clips == null || _Clips.Length <= 0)
-            {
-                Debug.LogError("Cue is empty");
-                return null;
-            }
-            Sound sound = Sound;
-            if(sound.Clip == null)
-            {
-                Debug.LogError("Clip in cue is empty");
-                return null;
-            }
-
-            return sound.Play(position);
+            return sound;
         }
     }
 }
