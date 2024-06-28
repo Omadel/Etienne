@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Etienne
 {
@@ -11,7 +12,7 @@ namespace Etienne
         public readonly Sound Sound => new(Clips[Random.Range(0, Clips.Length)], Parameters);
         public readonly SoundParameters Parameters => _parameters ?? SoundParameters.DefaultParameters;
 
-        [field: SerializeField] public AudioClip[] Clips { get; private set; }
+        [field: SerializeField, FormerlySerializedAs("_Clips")] public AudioClip[] Clips { get; private set; }
 
         [SerializeField] private SoundParametersScriptableObject _parameters;
 

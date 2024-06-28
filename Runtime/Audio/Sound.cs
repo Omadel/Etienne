@@ -1,12 +1,13 @@
 ﻿using Etienne.Pools;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Etienne
 {
     [System.Serializable]
     public struct Sound
     {
-        [field: SerializeField] public AudioClip Clip { get; private set; }
+        [field: SerializeField, FormerlySerializedAs("_Clip")] public AudioClip Clip { get; private set; }
         public readonly SoundParameters Parameters => _parameters ?? _parametersStruct;
 
         [SerializeField] private SoundParametersScriptableObject _parameters;
