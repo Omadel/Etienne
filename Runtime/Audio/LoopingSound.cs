@@ -83,16 +83,16 @@ namespace Etienne
 
         private readonly void StopSources()
         {
-            if (_startSource != null && _startSource.isPlaying)
+            if (_startSource != null && (_startSource.isPlaying || _startSource.enabled && _startSource.gameObject.activeInHierarchy))
             {
                 _startSource.Stop();
             }
-            if (_loopSource != null && _loopSource.isPlaying)
+            if (_loopSource != null && (_loopSource.isPlaying || _loopSource.enabled && _loopSource.gameObject.activeInHierarchy))
             {
                 AudioSourcePool.Instance.Enqueue(_loopSource);
                 _loopSource.Stop();
             }
-            if (_endSource != null && _endSource.isPlaying)
+            if (_endSource != null && (_endSource.isPlaying || _endSource.enabled && _endSource.gameObject.activeInHierarchy))
             {
                 _endSource.Stop();
             }
