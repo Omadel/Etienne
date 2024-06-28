@@ -60,7 +60,7 @@ namespace Etienne.Pools
         public static AudioSource Play(Sound sound, Transform transform)
         {
             AudioSource source = Play(sound);
-            source.transform.SetParent(transform, false);
+            Instance.Inspector.StickToTransform(source.transform, transform);
             return source;
         }
 
@@ -80,7 +80,7 @@ namespace Etienne.Pools
         public static AudioSource PlayWithDelay(Sound sound, Transform transform, float delay)
         {
             AudioSource source = Play(sound);
-            source.transform.SetParent(transform, false);
+            Instance.Inspector.StickToTransform(source.transform, transform);
             return source;
         }
         public static AudioSource PlayWithDelay(Sound sound, Vector3 position, float delay)
@@ -106,7 +106,7 @@ namespace Etienne.Pools
         public static AudioSource PlayLooped(Sound sound, Transform transform)
         {
             AudioSource source = PlayLooped(sound);
-            source.transform.SetParent(transform, false);
+            Instance.Inspector.StickToTransform(source.transform, transform);
             return source;
         }
 
@@ -125,7 +125,7 @@ namespace Etienne.Pools
         public static AudioSource PlayLoopedWithDelay(Sound sound, Transform transform, float delay)
         {
             AudioSource source = PlayLoopedWithDelay(sound, delay);
-            source.transform.SetParent(transform, false);
+            Instance.Inspector.StickToTransform(source.transform, transform);
             return source;
         }
 
