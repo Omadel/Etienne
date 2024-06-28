@@ -36,24 +36,24 @@ namespace Etienne
 
         public void Start()
         {
-            if (StartClip == null || LoopClip == null) return;
+            if (StartClip == null && LoopClip == null) return;
             InternalStart(out var startSound, out var loopSound);
-            _startSource = startSound.Play();
-            _loopSource = loopSound.PlayLoopedWithDelay(StartClip.length);
+            if (StartClip != null) _startSource = startSound.Play();
+            if (LoopClip != null) _loopSource = loopSound.PlayLoopedWithDelay(StartClip.length);
         }
         public void Start(Vector3 position)
         {
-            if (StartClip == null || LoopClip == null) return;
+            if (StartClip == null && LoopClip == null) return;
             InternalStart(out var startSound, out var loopSound);
-            _startSource = startSound.Play(position);
-            _loopSource = loopSound.PlayLoopedWithDelay(position, StartClip.length);
+            if (StartClip != null) _startSource = startSound.Play(position);
+            if (LoopClip != null) _loopSource = loopSound.PlayLoopedWithDelay(position, StartClip.length);
         }
         public void Start(Transform transform)
         {
-            if (StartClip == null || LoopClip == null) return;
+            if (StartClip == null && LoopClip == null) return;
             InternalStart(out var startSound, out var loopSound);
-            _startSource = startSound.Play(transform);
-            _loopSource = loopSound.PlayLoopedWithDelay(transform, StartClip.length);
+            if (StartClip != null) _startSource = startSound.Play(transform);
+            if (LoopClip != null) _loopSource = loopSound.PlayLoopedWithDelay(transform, StartClip.length);
         }
 
         internal readonly void InternalEnd(out Sound endSound)
